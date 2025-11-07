@@ -1,0 +1,239 @@
+<h2>💼 项目介绍话术（STAR法则）</h2>
+
+<p><strong>STAR法则：</strong>Situation（情境）→ Task（任务）→ Action（行动）→ Result（结果）</p>
+
+<hr>
+
+<h3>项目1：好未来供应链货盘系统</h3>
+
+<div class="highlight-box">
+    <h4>📋 项目背景（30秒版本）</h4>
+    <p><strong>Situation：</strong>这是好未来教育集团的电商供应链核心系统，主要负责订单全生命周期管理、赠品匹配、分销结算等功能，支持多平台（抖店、天猫）订单数据对接。我当时驻场在好未来，负责这个系统的全链路测试。</p>
+    
+    <p><strong>Task：</strong>我的主要任务是保障供应链货盘系统稳定上线，覆盖订单管理、分销结算、多平台对接三大核心模块的测试。</p>
+</div>
+
+<div class="tech-box">
+    <h4>💡 具体工作内容（Action）</h4>
+    
+    <p><strong>1. 订单管理测试</strong></p>
+    <ul>
+        <li>测试范围：原始单递交、订单审核、赠品匹配策略</li>
+        <li>测试方法：结合数据库校验关键字段一致性，设计端到端测试用例</li>
+        <li>覆盖场景：下单、支付、发货、补发、退货退款全流程</li>
+        <li>难点：赠品匹配规则复杂，需要验证多种促销策略组合</li>
+    </ul>
+    
+    <p><strong>2. 分销结算测试</strong></p>
+    <ul>
+        <li>测试范围：分销商管理、价盘配置、订单匹配价盘、结算单生成</li>
+        <li>测试重点：全链路验证，补充异常/重试与权限校验场景</li>
+        <li>数据校验：结算金额与订单金额的一致性</li>
+    </ul>
+    
+    <p><strong>3. 多平台对接测试</strong></p>
+    <ul>
+        <li>测试平台：抖店、天猫等多平台下单场景</li>
+        <li>测试重点：订单同步、数据流转一致性、分销订单获取</li>
+        <li>关注点：异常重试、边界场景、数据格式兼容性</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>🎯 项目成果（Result）</h4>
+    <ul>
+        <li>成功保障系统按期上线，上线后无P0/P1级别Bug</li>
+        <li>覆盖核心业务场景100+个测试用例</li>
+        <li>发现并推动修复20+个Bug，包括多个数据一致性问题</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❓ 可能的追问</h4>
+    <p><strong>Q1: 你遇到过什么难点？怎么解决的？</strong></p>
+    <p><strong>A:</strong> 最大的难点是赠品匹配规则复杂。比如满减活动+赠品活动叠加时，赠品的匹配优先级和扣减逻辑比较复杂。我的解决方法是：
+        <br>1. 和产品、开发深入沟通，梳理清楚所有匹配规则
+        <br>2. 画流程图，理清各种场景的优先级
+        <br>3. 设计矩阵表，覆盖各种组合场景
+        <br>4. 每个场景都验证数据库数据，确保计算正确
+    </p>
+    
+    <p><strong>Q2: 多平台对接你怎么测的？</strong></p>
+    <p><strong>A:</strong> 多平台对接主要测这几个方面：
+        <br>1. 数据格式兼容：不同平台订单字段不一样，验证解析正确性
+        <br>2. 数据流转：订单从平台同步到我们系统，再到分销，验证每个环节
+        <br>3. 异常场景：网络超时、数据缺失、重复推送等
+        <br>4. 使用抓包工具（Charles）查看平台回调数据
+    </p>
+</div>
+
+<hr>
+
+<h3>项目2：贝壳供应链货品与供应商管理</h3>
+
+<div class="highlight-box">
+    <h4>📋 项目背景</h4>
+    <p><strong>Situation：</strong>贝壳找房的供应链系统，管理商品全生命周期（从创建、上架、展厅样品到配送）和供应商全流程（入驻、审核、签约）。这是贝壳内部的核心业务系统，对质量要求很高。</p>
+    
+    <p><strong>Task：</strong>负责商品管理、供应商管理、审批中心三大模块的测试，同时参与质量体系建设（自动化+CI/CD）。</p>
+</div>
+
+<div class="tech-box">
+    <h4>💡 具体工作（Action）</h4>
+    
+    <p><strong>1. 测试全流程参与</strong></p>
+    <ul>
+        <li>参与需求及技术评审，严格把控需求质量</li>
+        <li>测试前置：需求阶段就提出潜在风险</li>
+    </ul>
+    
+    <p><strong>2. 核心业务测试</strong></p>
+    <ul>
+        <li><strong>商品管理：</strong>基础库配置→店铺上下架→展厅样品上撤样全流程</li>
+        <li><strong>供应商管理：</strong>入驻申请→审批→资质动态审核→合同全流程</li>
+        <li><strong>审批中心：</strong>审批流配置、触发条件、流转规则、批量编辑等</li>
+    </ul>
+    
+    <p><strong>3. 自动化与质量体系建设</strong></p>
+    <ul>
+        <li>使用 sosotest 维护自动化脚本（贝壳内部工具）</li>
+        <li>通过 kones 流水线平台配置准入/准出</li>
+        <li>搭建 Jenkins/kones 准入准出卡点</li>
+        <li>实现发布前质量门禁（通过率要求≥95%）</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>🎯 项目成果</h4>
+    <ul>
+        <li>保障系统高质量交付，线上Bug率<0.5%</li>
+        <li>自动化覆盖率达到60%+，回归测试效率提升70%</li>
+        <li>建立质量门禁机制，有效拦截问题代码</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❓ 可能的追问</h4>
+    <p><strong>Q: 你们的质量门禁是怎么做的？</strong></p>
+    <p><strong>A:</strong> 我们的质量门禁分两个阶段：
+        <br><strong>准入（提交代码前）：</strong>
+        <br>- 自动触发冒烟用例（核心接口）
+        <br>- 通过率必须100%
+        <br>- 执行时间<5分钟
+        <br>- 不通过禁止提交
+        
+        <br><strong>准出（发布前）：</strong>
+        <br>- 自动跑全量回归用例
+        <br>- 通过率≥95%
+        <br>- P0/P1 Bug=0
+        <br>- 不通过禁止发布
+        
+        <br>这样能在代码提交和发布两个关键节点拦截问题。
+    </p>
+</div>
+
+<hr>
+
+<h3>项目3：贝壳工资单项目</h3>
+
+<div class="highlight-box">
+    <h4>📋 项目背景</h4>
+    <p><strong>Situation：</strong>贝壳的薪酬系统，支持PC端和移动端灵活配置，集成多上游系统数据（考勤、绩效等），实现当月实时展示+历史数据归档。</p>
+    
+    <p><strong>Task：</strong>负责工资单系统、基薪系统的测试，保障多端配置化功能和多上游数据集成的准确性。</p>
+</div>
+
+<div class="tech-box">
+    <h4>💡 具体工作</h4>
+    <ul>
+        <li><strong>项目管理：</strong>将项目分模块管理，共同维护开发测试时间，缩短测试周期</li>
+        <li><strong>多端测试：</strong>PC、移动端配置化测试，验证字段独立配置规则</li>
+        <li><strong>数据集成：</strong>协同其他系统测试，从上游构造数据并核算，保证数据准确性</li>
+        <li><strong>性能测试：</strong>进行接口压测，记录QPS、RT、错误率等指标</li>
+        <li><strong>上线保障：</strong>提供上线checkList，包括回滚方案</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❓ 可能的追问</h4>
+    <p><strong>Q: 多上游数据集成怎么测？</strong></p>
+    <p><strong>A:</strong> 
+        <br>1. <strong>协同测试：</strong>和考勤、绩效系统测试人员沟通，确认测试数据
+        <br>2. <strong>分别造数：</strong>在各上游系统构造测试数据
+        <br>3. <strong>全链路验证：</strong>数据从上游→核算系统→工资单，每个环节验证
+        <br>4. <strong>数据一致性：</strong>对比上游数据、核算结果、最终工资单，确保一致
+        <br>5. <strong>异常场景：</strong>上游数据缺失、格式错误等异常情况
+    </p>
+</div>
+
+<hr>
+
+<h3>项目4：水滴保续费续保项目</h3>
+
+<div class="highlight-box">
+    <h4>📋 项目背景</h4>
+    <p><strong>Situation：</strong>水滴保的续费续保业务，通过多种触达方式（短信、微信、小程序等）和活动互动，实现用户续保。涉及高配置化的信使系统。</p>
+    
+    <p><strong>Task：</strong>负责续费续保交易流程、策略配置、触达系统的测试，同时建设自动化测试体系。</p>
+</div>
+
+<div class="tech-box">
+    <h4>💡 具体工作</h4>
+    <ul>
+        <li><strong>全流程测试：</strong>研测产沟通对齐，设计冒烟用例，Charles抓包验证</li>
+        <li><strong>自动化建设：</strong>Python + pytest + allure 编写接口自动化，Java编写造数工具</li>
+        <li><strong>微信生态：</strong>小程序码、订阅消息、公众号、支付流程全覆盖</li>
+        <li><strong>智能短信：</strong>iOS/Android不同供应商规则验证</li>
+        <li><strong>触达系统：</strong>高配置化触达链路迭代与配置审核</li>
+        <li><strong>消息链路：</strong>MQ生产/消费、重试/幂等、积压监控</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❓ 可能的追问</h4>
+    <p><strong>Q: 微信生态测试你都测什么？</strong></p>
+    <p><strong>A:</strong>
+        <br>1. <strong>小程序：</strong>小程序码生成、参数限制、页面跳转、授权登录
+        <br>2. <strong>订阅消息：</strong>模板配置、字数限制、发送成功率、点击跳转
+        <br>3. <strong>公众号：</strong>关注状态、消息推送、菜单跳转
+        <br>4. <strong>支付：</strong>微信支付/代扣签约流程、金额校验、回调处理
+        <br>5. <strong>H5跳小程序：</strong>内外链路跳转一致性
+        <br>使用Charles抓包查看微信的请求响应，验证参数和返回
+    </p>
+    
+    <p><strong>Q: MQ测试你怎么测的？</strong></p>
+    <p><strong>A:</strong>
+        <br>1. <strong>正常场景：</strong>发送消息，验证消费成功
+        <br>2. <strong>异常场景：</strong>停掉消费者，验证消息积压和重试
+        <br>3. <strong>幂等性：</strong>重复发送相同消息，验证不会重复处理
+        <br>4. <strong>顺序性：</strong>连续发送有序消息，验证消费顺序
+        <br>5. <strong>监控：</strong>查看MQ管理后台，监控积压、消费速度
+    </p>
+</div>
+
+<hr>
+
+<h3>通用面试话术技巧</h3>
+
+<div class="highlight-box">
+    <h4>✅ 好的回答方式</h4>
+    <ul>
+        <li><strong>简洁明了：</strong>先说结论，再说细节（30秒版本+详细版本）</li>
+        <li><strong>突出重点：</strong>强调你的核心贡献和难点</li>
+        <li><strong>量化成果：</strong>有数据支撑（Bug数、覆盖率、效率提升）</li>
+        <li><strong>展示思考：</strong>说清楚为什么这么做，体现思考能力</li>
+        <li><strong>真实可信：</strong>不夸大，能回答追问</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❌ 避免的问题</h4>
+    <ul>
+        <li><strong>说得太笼统：</strong>"就是测功能、接口"（没有细节）</li>
+        <li><strong>说得太细碎：</strong>流水账，抓不住重点</li>
+        <li><strong>说不清难点：</strong>面试官会觉得项目太简单</li>
+        <li><strong>无法回答追问：</strong>说明对项目理解不深</li>
+        <li><strong>过度夸大：</strong>说"独立负责"但回答不上细节</li>
+    </ul>
+</div>
+

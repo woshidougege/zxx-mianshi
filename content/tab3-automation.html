@@ -1,0 +1,310 @@
+<h2>🤖 自动化测试</h2>
+
+<h3>接口自动化框架</h3>
+
+<div class="highlight-box">
+    <h4>Python + requests + pytest 框架</h4>
+    <p><strong>框架结构：</strong></p>
+    <pre><code>project/
+├── config/           # 配置文件（环境、数据库等）
+├── test_cases/       # 测试用例
+├── common/           # 公共方法（请求封装、数据库操作等）
+├── data/             # 测试数据
+├── logs/             # 日志
+└── reports/          # 测试报告</code></pre>
+</div>
+
+<div class="tech-box">
+    <h4>基础示例代码</h4>
+    <pre><code># test_login.py
+import requests
+import pytest
+
+class TestLogin:
+    base_url = "https://api.example.com"
+    
+    def test_login_success(self):
+        """测试正常登录"""
+        url = f"{self.base_url}/login"
+        data = {
+            "username": "test",
+            "password": "123456"
+        }
+        response = requests.post(url, json=data)
+        
+        # 断言
+        assert response.status_code == 200
+        assert response.json()["code"] == 0
+        assert "token" in response.json()["data"]
+    
+    def test_login_wrong_password(self):
+        """测试错误密码"""
+        url = f"{self.base_url}/login"
+        data = {
+            "username": "test",
+            "password": "wrong"
+        }
+        response = requests.post(url, json=data)
+        
+        assert response.status_code == 200
+        assert response.json()["code"] == 1001
+        assert "密码错误" in response.json()["msg"]
+    
+    @pytest.mark.parametrize("username,password,expected_code", [
+        ("", "123456", 1002),  # 用户名为空
+        ("test", "", 1003),    # 密码为空
+        ("", "", 1002),         # 都为空
+    ])
+    def test_login_params(self, username, password, expected_code):
+        """参数化测试"""
+        url = f"{self.base_url}/login"
+        data = {
+            "username": username,
+            "password": password
+        }
+        response = requests.post(url, json=data)
+        assert response.json()["code"] == expected_code</code></pre>
+</div>
+
+<hr>
+
+<h3>pytest核心功能</h3>
+
+<div class="example-box">
+    <h4>1. fixture - 测试前后处理</h4>
+    <pre><code>import pytest
+
+@pytest.fixture(scope="function")
+def login():
+    """每个测试前登录"""
+    print("执行登录")
+    token = "test_token_123"
+    yield token  # 返回给测试用例
+    print("测试结束，清理数据")
+
+def test_get_user_info(login):
+    """使用fixture"""
+    token = login
+    # 使用token调用接口
+    print(f"使用token: {token}")</code></pre>
+    
+    <p><strong>scope参数：</strong></p>
+    <ul>
+        <li><code>function</code>: 每个测试函数执行一次（默认）</li>
+        <li><code>class</code>: 每个测试类执行一次</li>
+        <li><code>module</code>: 每个模块执行一次</li>
+        <li><code>session</code>: 整个测试会话执行一次</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>2. conftest.py - 共享配置</h4>
+    <pre><code># conftest.py
+import pytest
+
+@pytest.fixture(scope="session")
+def base_url():
+    """全局配置"""
+    return "https://api.example.com"
+
+@pytest.fixture(scope="session")
+def admin_token():
+    """管理员token"""
+    # 执行登录获取token
+    return "admin_token_abc"</code></pre>
+</div>
+
+<div class="example-box">
+    <h4>3. 参数化测试</h4>
+    <pre><code>import pytest
+
+@pytest.mark.parametrize("age,expected", [
+    (0, False),    # 边界值-1
+    (1, True),     # 最小值
+    (60, True),    # 中间值
+    (120, True),   # 最大值
+    (121, False),  # 边界值+1
+])
+def test_age_validation(age, expected):
+    result = validate_age(age)
+    assert result == expected</code></pre>
+</div>
+
+<hr>
+
+<h3>数据驱动测试</h3>
+
+<div class="tech-box">
+    <h4>使用Excel/CSV管理测试数据</h4>
+    <pre><code># test_data.csv
+username,password,expected_code,expected_msg
+test1,123456,0,登录成功
+test2,wrong,1001,密码错误
+,,1002,用户名不能为空
+
+# test_login_data_driven.py
+import pytest
+import csv
+
+def load_test_data():
+    """读取测试数据"""
+    with open('test_data.csv', 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+@pytest.mark.parametrize("case", load_test_data())
+def test_login_from_csv(case):
+    """数据驱动测试"""
+    response = login(case['username'], case['password'])
+    assert response['code'] == int(case['expected_code'])
+    assert case['expected_msg'] in response['msg']</code></pre>
+</div>
+
+<hr>
+
+<h3>CI/CD集成</h3>
+
+<div class="highlight-box">
+    <h4>Jenkins Pipeline集成</h4>
+    <pre><code>pipeline {
+    agent any
+    
+    stages {
+        stage('拉取代码') {
+            steps {
+                git 'https://github.com/xxx/test-project.git'
+            }
+        }
+        
+        stage('安装依赖') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        
+        stage('执行测试') {
+            steps {
+                sh 'pytest --alluredir=./allure-results'
+            }
+        }
+        
+        stage('生成报告') {
+            steps {
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'allure-results']]
+            }
+        }
+        
+        stage('发送通知') {
+            steps {
+                emailext body: '测试完成，查看报告',
+                         subject: '自动化测试报告',
+                         to: 'test@example.com'
+            }
+        }
+    }
+}</code></pre>
+</div>
+
+<hr>
+
+<h3>质量门禁设置</h3>
+
+<div class="tech-box">
+    <h4>准入准出标准</h4>
+    <table>
+        <tr>
+            <th>阶段</th>
+            <th>检查项</th>
+            <th>标准</th>
+        </tr>
+        <tr>
+            <td rowspan="3">准入（代码提交前）</td>
+            <td>冒烟用例通过率</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>核心接口通过率</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>执行时间</td>
+            <td>&lt; 5分钟</td>
+        </tr>
+        <tr>
+            <td rowspan="4">准出（发布前）</td>
+            <td>全量用例通过率</td>
+            <td>≥ 95%</td>
+        </tr>
+        <tr>
+            <td>P0/P1 Bug数量</td>
+            <td>0个</td>
+        </tr>
+        <tr>
+            <td>用例覆盖率</td>
+            <td>≥ 80%</td>
+        </tr>
+        <tr>
+            <td>执行时间</td>
+            <td>&lt; 30分钟</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+
+<h3>自动化测试最佳实践</h3>
+
+<div class="example-box">
+    <h4>✅ 推荐做法</h4>
+    <ul>
+        <li><strong>分层测试：</strong>接口自动化为主（70%）、UI自动化为辅（30%）</li>
+        <li><strong>稳定优先：</strong>优先自动化稳定的功能</li>
+        <li><strong>独立性：</strong>测试用例之间相互独立，不依赖执行顺序</li>
+        <li><strong>可读性：</strong>代码清晰，命名规范，注释完整</li>
+        <li><strong>可维护性：</strong>参数化、配置化，减少hardcode</li>
+        <li><strong>快速反馈：</strong>冒烟用例快速执行（5分钟内）</li>
+        <li><strong>失败重试：</strong>网络不稳定的用例可以重试1-2次</li>
+        <li><strong>日志详细：</strong>记录请求、响应、断言结果</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❌ 避免的问题</h4>
+    <ul>
+        <li><strong>过度自动化：</strong>UI频繁变动的页面不适合自动化</li>
+        <li><strong>用例依赖：</strong>测试A依赖测试B的数据，A失败B也失败</li>
+        <li><strong>断言不足：</strong>只验证状态码，不验证业务数据</li>
+        <li><strong>硬编码：</strong>环境、数据写死在代码里</li>
+        <li><strong>忽略维护：</strong>接口变更不及时更新用例</li>
+        <li><strong>忽略报告：</strong>执行完不看报告，失败也不管</li>
+    </ul>
+</div>
+
+<hr>
+
+<h3>自动化测试ROI计算</h3>
+
+<div class="tech-box">
+    <p><strong>投入成本：</strong></p>
+    <ul>
+        <li>脚本开发时间：假设100个用例，每个30分钟 = 50小时</li>
+        <li>脚本维护时间：每月10小时</li>
+    </ul>
+    
+    <p><strong>节省成本：</strong></p>
+    <ul>
+        <li>手工执行时间：每次回归100个用例，需要2天（16小时）</li>
+        <li>回归频率：每周1次，一年52次</li>
+        <li>年节省时间：52 × 16 = 832小时</li>
+    </ul>
+    
+    <p><strong>ROI分析：</strong></p>
+    <ul>
+        <li>第1年：节省832小时 - 投入50小时 - 维护120小时 = 662小时</li>
+        <li>第2年：节省832小时 - 维护120小时 = 712小时</li>
+        <li>投资回报率：第1年就回本，第2年收益更高</li>
+    </ul>
+</div>
+

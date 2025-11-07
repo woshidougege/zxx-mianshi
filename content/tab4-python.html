@@ -1,0 +1,426 @@
+<h2>🐍 Python测试基础</h2>
+
+<h3>Python基础语法</h3>
+
+<div class="highlight-box">
+    <h4>1. 数据类型</h4>
+    <pre><code># 列表 List - 可变
+users = ['alice', 'bob', 'charlie']
+users.append('david')  # 添加
+users[0]  # 访问：'alice'
+len(users)  # 长度：4
+
+# 字典 Dict - 键值对
+user = {
+    'name': 'test',
+    'age': 25,
+    'city': 'Beijing'
+}
+user['name']  # 访问：'test'
+user['email'] = 'test@qq.com'  # 添加
+
+# 元组 Tuple - 不可变
+coords = (10, 20)
+x, y = coords  # 解包
+
+# 集合 Set - 去重
+tags = {'python', 'test', 'python'}  # 自动去重
+print(tags)  # {'python', 'test'}</code></pre>
+</div>
+
+<div class="highlight-box">
+    <h4>2. 控制流</h4>
+    <pre><code># if 条件判断
+status_code = 200
+if status_code == 200:
+    print("成功")
+elif status_code == 404:
+    print("未找到")
+else:
+    print("其他错误")
+
+# for 循环
+test_cases = ['case1', 'case2', 'case3']
+for case in test_cases:
+    print(f"执行测试：{case}")
+
+# while 循环
+retry_count = 0
+while retry_count < 3:
+    print(f"重试第{retry_count + 1}次")
+    retry_count += 1
+
+# 列表推导式
+numbers = [1, 2, 3, 4, 5]
+squares = [x**2 for x in numbers]  # [1, 4, 9, 16, 25]
+evens = [x for x in numbers if x % 2 == 0]  # [2, 4]</code></pre>
+</div>
+
+<div class="highlight-box">
+    <h4>3. 函数</h4>
+    <pre><code># 定义函数
+def login(username, password):
+    """用户登录"""
+    if username == 'test' and password == '123':
+        return {'code': 0, 'msg': '成功'}
+    return {'code': 1, 'msg': '失败'}
+
+# 调用函数
+result = login('test', '123')
+print(result)
+
+# 默认参数
+def request_api(url, method='GET', timeout=30):
+    print(f"{method} {url} timeout={timeout}")
+
+request_api('http://api.test.com')  # 使用默认值
+request_api('http://api.test.com', 'POST', 60)  # 指定参数
+
+# 可变参数
+def test_batch(*test_cases):
+    for case in test_cases:
+        print(f"执行：{case}")
+
+test_batch('case1', 'case2', 'case3')</code></pre>
+</div>
+
+<hr>
+
+<h3>requests库详解</h3>
+
+<div class="tech-box">
+    <h4>基本请求</h4>
+    <pre><code>import requests
+
+# GET请求
+response = requests.get('https://api.example.com/users')
+print(response.status_code)  # 200
+print(response.json())  # 解析JSON响应
+
+# POST请求 - JSON格式
+data = {
+    'username': 'test',
+    'password': '123456'
+}
+response = requests.post('https://api.example.com/login', json=data)
+
+# POST请求 - 表单格式
+data = {
+    'username': 'test',
+    'password': '123456'
+}
+response = requests.post('https://api.example.com/login', data=data)
+
+# PUT请求
+data = {'name': 'new_name'}
+response = requests.put('https://api.example.com/users/1', json=data)
+
+# DELETE请求
+response = requests.delete('https://api.example.com/users/1')</code></pre>
+</div>
+
+<div class="tech-box">
+    <h4>请求参数</h4>
+    <pre><code># URL参数 (Query String)
+params = {
+    'page': 1,
+    'size': 10,
+    'keyword': 'test'
+}
+response = requests.get('https://api.example.com/search', params=params)
+# 实际请求：https://api.example.com/search?page=1&size=10&keyword=test
+
+# Headers 请求头
+headers = {
+    'Authorization': 'Bearer token_abc123',
+    'Content-Type': 'application/json',
+    'User-Agent': 'Test-Client/1.0'
+}
+response = requests.get('https://api.example.com/data', headers=headers)
+
+# Cookies
+cookies = {
+    'session_id': 'abc123',
+    'user_id': '12345'
+}
+response = requests.get('https://api.example.com/user', cookies=cookies)
+
+# 超时设置
+response = requests.get('https://api.example.com/data', timeout=10)  # 10秒超时
+
+# SSL证书验证
+response = requests.get('https://api.example.com/data', verify=False)  # 忽略证书验证</code></pre>
+</div>
+
+<div class="tech-box">
+    <h4>响应处理</h4>
+    <pre><code>response = requests.get('https://api.example.com/users/1')
+
+# 状态码
+print(response.status_code)  # 200
+
+# 响应头
+print(response.headers)
+print(response.headers['Content-Type'])
+
+# 响应体
+print(response.text)  # 文本格式
+print(response.content)  # 二进制格式
+print(response.json())  # JSON格式
+
+# 响应时间
+print(response.elapsed.total_seconds())  # 响应时间（秒）
+
+# 判断请求是否成功
+if response.status_code == 200:
+    print("成功")
+else:
+    print(f"失败：{response.status_code}")
+
+# 或者使用raise_for_status
+try:
+    response.raise_for_status()  # 4xx、5xx会抛异常
+    print("成功")
+except requests.HTTPError as e:
+    print(f"HTTP错误：{e}")</code></pre>
+</div>
+
+<div class="tech-box">
+    <h4>Session会话管理</h4>
+    <pre><code># 使用Session保持会话（自动管理Cookie）
+session = requests.Session()
+
+# 登录
+login_data = {
+    'username': 'test',
+    'password': '123456'
+}
+response = session.post('https://api.example.com/login', json=login_data)
+
+# 后续请求自动带上Cookie
+response = session.get('https://api.example.com/user/profile')
+response = session.get('https://api.example.com/orders')
+
+# 设置默认headers（所有请求都会带上）
+session.headers.update({
+    'User-Agent': 'Test-Client/1.0',
+    'Accept': 'application/json'
+})
+
+# 关闭Session
+session.close()</code></pre>
+</div>
+
+<hr>
+
+<h3>pytest框架详解</h3>
+
+<div class="example-box">
+    <h4>测试用例组织</h4>
+    <pre><code># test_user.py
+class TestUser:
+    """用户相关测试"""
+    
+    def test_get_user_info(self):
+        """获取用户信息"""
+        assert True
+    
+    def test_update_user_info(self):
+        """更新用户信息"""
+        assert True
+
+class TestOrder:
+    """订单相关测试"""
+    
+    def test_create_order(self):
+        """创建订单"""
+        assert True
+    
+    def test_cancel_order(self):
+        """取消订单"""
+        assert True</code></pre>
+</div>
+
+<div class="example-box">
+    <h4>断言方法</h4>
+    <pre><code># 基本断言
+assert 1 + 1 == 2
+assert 'test' in 'this is a test'
+assert [1, 2, 3] == [1, 2, 3]
+
+# 异常断言
+import pytest
+
+def test_zero_division():
+    with pytest.raises(ZeroDivisionError):
+        1 / 0
+
+def test_value_error():
+    with pytest.raises(ValueError, match='invalid'):
+        raise ValueError('invalid value')
+
+# 近似值断言
+assert 0.1 + 0.2 == pytest.approx(0.3)
+
+# 自定义失败信息
+assert response.status_code == 200, f"期望200，实际{response.status_code}"</code></pre>
+</div>
+
+<div class="example-box">
+    <h4>pytest标记（mark）</h4>
+    <pre><code>import pytest
+
+# 跳过测试
+@pytest.mark.skip(reason="功能未开发")
+def test_new_feature():
+    pass
+
+# 条件跳过
+@pytest.mark.skipif(sys.platform == "win32", reason="不支持Windows")
+def test_linux_only():
+    pass
+
+# 预期失败
+@pytest.mark.xfail
+def test_known_bug():
+    assert False
+
+# 自定义标记
+@pytest.mark.smoke  # 冒烟测试
+def test_login():
+    pass
+
+@pytest.mark.regression  # 回归测试
+def test_order_flow():
+    pass
+
+# 运行指定标记的测试
+# pytest -m smoke
+# pytest -m "smoke or regression"</code></pre>
+</div>
+
+<hr>
+
+<h3>数据库操作</h3>
+
+<div class="tech-box">
+    <h4>pymysql 使用</h4>
+    <pre><code>import pymysql
+
+# 连接数据库
+conn = pymysql.connect(
+    host='localhost',
+    port=3306,
+    user='root',
+    password='123456',
+    database='test_db',
+    charset='utf8mb4'
+)
+
+# 创建游标
+cursor = conn.cursor()
+
+# 查询数据
+sql = "SELECT * FROM users WHERE id = %s"
+cursor.execute(sql, (1,))
+result = cursor.fetchone()  # 获取一条
+print(result)
+
+results = cursor.fetchall()  # 获取所有
+for row in results:
+    print(row)
+
+# 插入数据
+sql = "INSERT INTO users (name, age) VALUES (%s, %s)"
+cursor.execute(sql, ('test', 25))
+conn.commit()  # 提交事务
+
+# 更新数据
+sql = "UPDATE users SET age = %s WHERE id = %s"
+cursor.execute(sql, (26, 1))
+conn.commit()
+
+# 删除数据
+sql = "DELETE FROM users WHERE id = %s"
+cursor.execute(sql, (1,))
+conn.commit()
+
+# 关闭连接
+cursor.close()
+conn.close()</code></pre>
+</div>
+
+<hr>
+
+<h3>文件操作</h3>
+
+<div class="tech-box">
+    <h4>读写文件</h4>
+    <pre><code># 读取文件
+with open('test_data.txt', 'r', encoding='utf-8') as f:
+    content = f.read()  # 读取全部
+    print(content)
+
+with open('test_data.txt', 'r', encoding='utf-8') as f:
+    lines = f.readlines()  # 按行读取
+    for line in lines:
+        print(line.strip())
+
+# 写入文件
+with open('output.txt', 'w', encoding='utf-8') as f:
+    f.write('Hello World\n')
+    f.write('测试数据\n')
+
+# 追加文件
+with open('log.txt', 'a', encoding='utf-8') as f:
+    f.write('新的日志\n')
+
+# 读写JSON
+import json
+
+# 读取JSON
+with open('config.json', 'r', encoding='utf-8') as f:
+    config = json.load(f)
+
+# 写入JSON
+data = {'name': 'test', 'age': 25}
+with open('data.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)</code></pre>
+</div>
+
+<hr>
+
+<h3>异常处理</h3>
+
+<div class="tech-box">
+    <pre><code># try-except 捕获异常
+try:
+    response = requests.get('https://api.example.com/data', timeout=5)
+    response.raise_for_status()
+    data = response.json()
+except requests.Timeout:
+    print("请求超时")
+except requests.HTTPError as e:
+    print(f"HTTP错误：{e}")
+except requests.RequestException as e:
+    print(f"请求异常：{e}")
+except Exception as e:
+    print(f"未知错误：{e}")
+finally:
+    print("无论如何都会执行")
+
+# 主动抛出异常
+def validate_age(age):
+    if age < 0 or age > 120:
+        raise ValueError(f"年龄无效：{age}")
+    return True
+
+# 自定义异常
+class TestException(Exception):
+    pass
+
+def run_test():
+    if not condition:
+        raise TestException("测试条件不满足")</code></pre>
+</div>
+

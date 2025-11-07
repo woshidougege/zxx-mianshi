@@ -1,0 +1,333 @@
+<h2>🔮 AI辅助测试实战</h2>
+
+<h3>AI编程助手使用</h3>
+
+<div class="highlight-box">
+    <h4>Cursor - AI代码编辑器</h4>
+    <p><strong>核心功能：</strong></p>
+    <ul>
+        <li><strong>AI补全：</strong>写注释自动生成代码</li>
+        <li><strong>Chat对话：</strong>Cmd/Ctrl + K 打开对话，问AI问题</li>
+        <li><strong>代码解释：</strong>选中代码，让AI解释</li>
+        <li><strong>Bug修复：</strong>选中报错，AI帮你修复</li>
+    </ul>
+    
+    <div class="example-box">
+        <h4>实战示例1：编写测试用例</h4>
+        <pre><code># 只需要写注释，Cursor自动生成代码
+# 编写一个测试用例，测试用户登录接口
+# 接口地址：/api/login
+# 请求方式：POST
+# 参数：username, password
+# 验证：状态码200，返回token
+
+# Cursor会自动生成如下代码：
+import requests
+
+def test_login():
+    url = "https://api.example.com/api/login"
+    data = {
+        "username": "test",
+        "password": "123456"
+    }
+    response = requests.post(url, json=data)
+    
+    assert response.status_code == 200
+    assert "token" in response.json()</code></pre>
+    </div>
+    
+    <div class="example-box">
+        <h4>实战示例2：造数脚本</h4>
+        <pre><code># 写一个脚本，批量插入100个测试用户到数据库
+# 数据库：MySQL
+# 表：users (id, name, age, email, created_at)
+# 名字随机生成，年龄18-60，邮箱格式：name@test.com
+
+# Cursor自动生成完整脚本，包括数据库连接、随机数据生成、批量插入</code></pre>
+    </div>
+</div>
+
+<hr>
+
+<h3>AI大模型应用场景</h3>
+
+<div class="tech-box">
+    <h4>场景1：测试用例设计</h4>
+    <p><strong>Prompt示例：</strong></p>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>我在测试一个电商系统的退款功能，需求如下：
+1. 用户可以申请全额退款或部分退款
+2. 订单状态为"已支付"或"已发货"才能退款
+3. "已完成"的订单7天内可退款
+4. 退款金额不能超过订单金额
+5. 退款需要填写退款原因
+请帮我设计测试用例，包括正常场景、异常场景和边界场景</pre>
+        
+        <p><strong>AI输出：</strong>测试用例列表，包括：</p>
+        <ul>
+            <li>正常场景：各种状态下的退款</li>
+            <li>异常场景：超过7天退款、退款金额超限、状态不符等</li>
+            <li>边界场景：正好7天、退款金额等于订单金额等</li>
+        </ul>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>场景2：日志分析</h4>
+    <p><strong>Prompt示例：</strong></p>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>这是一个订单系统的错误日志，请帮我分析问题原因：
+
+2024-11-07 10:23:45 ERROR OrderService - 创建订单失败
+java.lang.NullPointerException: Cannot invoke "com.example.User.getId()" because "user" is null
+    at com.example.OrderService.createOrder(OrderService.java:45)
+    at com.example.OrderController.create(OrderController.java:28)
+...</pre>
+        
+        <p><strong>AI分析：</strong></p>
+        <ul>
+            <li>问题：NullPointerException，user对象为null</li>
+            <li>位置：OrderService.java第45行</li>
+            <li>原因：调用createOrder时没有传入user或user获取失败</li>
+            <li>建议：检查user是否正确传递，添加null判断</li>
+        </ul>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>场景3：SQL生成</h4>
+    <p><strong>Prompt示例：</strong></p>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>我需要查询订单表（orders）和用户表（users）的数据
+查询条件：
+1. 订单状态为"已支付"
+2. 订单金额大于1000
+3. 用户注册时间在最近30天内
+4. 按订单创建时间降序排列
+5. 只查询前20条
+请生成SQL语句</pre>
+        
+        <p><strong>AI生成：</strong></p>
+        <pre><code>SELECT 
+    o.order_no,
+    o.amount,
+    o.status,
+    o.created_at as order_time,
+    u.name as user_name,
+    u.email
+FROM orders o
+LEFT JOIN users u ON o.user_id = u.id
+WHERE o.status = '已支付'
+    AND o.amount > 1000
+    AND u.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+ORDER BY o.created_at DESC
+LIMIT 20;</code></pre>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>场景4：自动化脚本生成</h4>
+    <p><strong>Prompt示例：</strong></p>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>帮我写一个接口自动化脚本，使用Python + pytest + requests
+测试场景：用户注册流程
+1. 发送注册请求（POST /api/register）
+2. 参数：username, password, email
+3. 验证：状态码200，返回user_id
+4. 查询数据库验证用户是否插入成功
+5. 清理：测试后删除创建的用户</pre>
+        
+        <p><strong>AI生成：</strong>完整的pytest测试脚本，包括fixture、测试用例、数据库操作</p>
+    </div>
+</div>
+
+<hr>
+
+<h3>Prompt工程技巧</h3>
+
+<div class="highlight-box">
+    <h4>1. 提供清晰的上下文</h4>
+    <div class="warning-box">
+        <p><strong>❌ 不好的Prompt：</strong></p>
+        <pre>帮我写个测试用例</pre>
+    </div>
+    <div class="example-box">
+        <p><strong>✅ 好的Prompt：</strong></p>
+        <pre>我在测试一个电商系统的购物车功能，需要测试"加入购物车"接口
+接口地址：POST /api/cart/add
+参数：product_id（商品ID）, quantity（数量）
+业务规则：
+1. 数量必须是正整数
+2. 商品必须存在且有库存
+3. 同一商品多次加入会累加数量
+请帮我设计测试用例</pre>
+    </div>
+</div>
+
+<div class="highlight-box">
+    <h4>2. 分步骤提问</h4>
+    <div class="example-box">
+        <p>复杂问题拆分成小步骤：</p>
+        <ol>
+            <li>第1步：理解需求 - "这个功能的核心逻辑是什么？"</li>
+            <li>第2步：设计用例 - "帮我设计测试用例"</li>
+            <li>第3步：编写脚本 - "把这些用例写成pytest脚本"</li>
+            <li>第4步：优化代码 - "帮我优化这段代码，提取公共方法"</li>
+        </ol>
+    </div>
+</div>
+
+<div class="highlight-box">
+    <h4>3. 给出示例（Few-shot）</h4>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>我有一个登录测试用例如下：
+```python
+def test_login_success():
+    response = requests.post('/api/login', json={'username': 'test', 'password': '123'})
+    assert response.status_code == 200
+```
+
+请参考这个格式，帮我写注册、修改密码、登出的测试用例</pre>
+        <p>AI会按照你给的格式生成类似的用例</p>
+    </div>
+</div>
+
+<div class="highlight-box">
+    <h4>4. 明确输出格式</h4>
+    <div class="example-box">
+        <p><strong>输入：</strong></p>
+        <pre>分析这个Bug的原因，请按以下格式输出：
+1. Bug现象：
+2. 问题定位：
+3. 根本原因：
+4. 解决方案：
+5. 预防措施：</pre>
+    </div>
+</div>
+
+<hr>
+
+<h3>不同AI模型的选择</h3>
+
+<table>
+    <tr>
+        <th>模型</th>
+        <th>优势</th>
+        <th>适用场景</th>
+        <th>访问方式</th>
+    </tr>
+    <tr>
+        <td><strong>ChatGPT</strong></td>
+        <td>全面、理解能力强</td>
+        <td>测试方案设计、用例设计、问题分析</td>
+        <td>网页版 / API</td>
+    </tr>
+    <tr>
+        <td><strong>Claude</strong></td>
+        <td>代码能力强、逻辑清晰</td>
+        <td>Python脚本生成、代码Review、SQL生成</td>
+        <td>网页版 / API</td>
+    </tr>
+    <tr>
+        <td><strong>千问</strong></td>
+        <td>中文理解好、免费</td>
+        <td>中文需求分析、中文日志分析</td>
+        <td>网页版 / API</td>
+    </tr>
+    <tr>
+        <td><strong>DeepSeek</strong></td>
+        <td>数学推理强、性价比高</td>
+        <td>性能数据分析、复杂计算</td>
+        <td>网页版 / API</td>
+    </tr>
+    <tr>
+        <td><strong>Cursor</strong></td>
+        <td>编辑器集成、实时补全</td>
+        <td>编写测试代码、调试</td>
+        <td>桌面应用</td>
+    </tr>
+    <tr>
+        <td><strong>GitHub Copilot</strong></td>
+        <td>代码补全快速</td>
+        <td>快速编写测试脚本</td>
+        <td>VSCode插件</td>
+    </tr>
+</table>
+
+<hr>
+
+<h3>AI辅助测试最佳实践</h3>
+
+<div class="highlight-box">
+    <h4>✅ 推荐做法</h4>
+    <ul>
+        <li><strong>用AI做重复性工作：</strong>生成测试数据、编写重复的测试用例</li>
+        <li><strong>用AI辅助学习：</strong>遇到不懂的技术，问AI</li>
+        <li><strong>用AI分析问题：</strong>日志分析、Bug定位</li>
+        <li><strong>用AI优化代码：</strong>重构、性能优化建议</li>
+        <li><strong>验证AI结果：</strong>AI生成的代码需要Review和测试</li>
+        <li><strong>迭代优化：</strong>如果结果不满意，追问和调整Prompt</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h4>❌ 注意事项</h4>
+    <ul>
+        <li><strong>不要盲目信任：</strong>AI会犯错，需要人工Review</li>
+        <li><strong>不要泄露敏感信息：</strong>公司代码、密码等不要直接贴给AI</li>
+        <li><strong>不要完全依赖：</strong>AI是辅助工具，不能替代思考</li>
+        <li><strong>不要忽略基础：</strong>AI只是工具，基础知识还是要学</li>
+    </ul>
+</div>
+
+<hr>
+
+<h3>AI辅助测试效率提升</h3>
+
+<div class="tech-box">
+    <table>
+        <tr>
+            <th>任务</th>
+            <th>传统方式</th>
+            <th>AI辅助</th>
+            <th>效率提升</th>
+        </tr>
+        <tr>
+            <td>编写测试脚本</td>
+            <td>30分钟</td>
+            <td>5分钟</td>
+            <td>6倍</td>
+        </tr>
+        <tr>
+            <td>设计测试用例</td>
+            <td>1小时</td>
+            <td>15分钟</td>
+            <td>4倍</td>
+        </tr>
+        <tr>
+            <td>日志分析定位</td>
+            <td>30分钟</td>
+            <td>5分钟</td>
+            <td>6倍</td>
+        </tr>
+        <tr>
+            <td>SQL语句编写</td>
+            <td>20分钟</td>
+            <td>2分钟</td>
+            <td>10倍</td>
+        </tr>
+        <tr>
+            <td>学习新技术</td>
+            <td>1天</td>
+            <td>2小时</td>
+            <td>4倍</td>
+        </tr>
+    </table>
+    <p><strong>综合效率提升：50%-70%</strong></p>
+</div>
+

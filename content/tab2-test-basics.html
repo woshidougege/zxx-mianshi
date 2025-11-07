@@ -1,0 +1,353 @@
+<h2>🧪 测试基础知识</h2>
+
+<h3>测试分类</h3>
+
+<div class="highlight-box">
+    <h4>1. 功能测试</h4>
+    <p><strong>定义：</strong>验证软件功能是否符合需求规格说明</p>
+    <p><strong>测试方法：</strong></p>
+    <ul>
+        <li><strong>等价类划分：</strong>将输入划分为有效类和无效类</li>
+        <li><strong>边界值分析：</strong>测试边界附近的值（最大、最小、刚好超出）</li>
+        <li><strong>场景法：</strong>按照用户使用流程设计测试场景</li>
+        <li><strong>错误推测法：</strong>根据经验推测可能出错的地方</li>
+    </ul>
+    <p><strong>示例：</strong>登录功能测试</p>
+    <ul>
+        <li>正确的用户名和密码 → 登录成功</li>
+        <li>错误的密码 → 提示密码错误</li>
+        <li>不存在的用户 → 提示用户不存在</li>
+        <li>密码输入3次错误 → 账号锁定</li>
+        <li>特殊字符、SQL注入 → 安全测试</li>
+    </ul>
+</div>
+
+<div class="highlight-box">
+    <h4>2. 接口测试</h4>
+    <p><strong>定义：</strong>测试系统之间的数据交互接口</p>
+    <p><strong>测试要点：</strong></p>
+    <ul>
+        <li><strong>请求验证：</strong>URL、Method（GET/POST）、Headers、Parameters、Body</li>
+        <li><strong>响应验证：</strong>Status Code（200/404/500）、Response Body、Response Time</li>
+        <li><strong>业务逻辑：</strong>数据库数据是否正确、关联接口影响</li>
+        <li><strong>异常场景：</strong>参数缺失、参数类型错误、超时、权限校验</li>
+    </ul>
+    <p><strong>常用工具：</strong>Postman、JMeter、Python requests</p>
+</div>
+
+<div class="highlight-box">
+    <h4>3. 性能测试</h4>
+    <p><strong>定义：</strong>验证系统在特定负载下的响应时间和稳定性</p>
+    <p><strong>核心指标：</strong></p>
+    <table>
+        <tr>
+            <th>指标</th>
+            <th>说明</th>
+            <th>目标值（参考）</th>
+        </tr>
+        <tr>
+            <td>QPS</td>
+            <td>每秒查询率</td>
+            <td>根据业务，一般 > 1000</td>
+        </tr>
+        <tr>
+            <td>RT</td>
+            <td>响应时间</td>
+            <td>接口 < 500ms，页面 < 3s</td>
+        </tr>
+        <tr>
+            <td>错误率</td>
+            <td>失败请求占比</td>
+            <td>< 0.1%</td>
+        </tr>
+        <tr>
+            <td>并发数</td>
+            <td>同时访问用户数</td>
+            <td>根据业务设定</td>
+        </tr>
+    </table>
+    <p><strong>测试类型：</strong></p>
+    <ul>
+        <li><strong>负载测试：</strong>逐步增加负载，找到系统瓶颈</li>
+        <li><strong>压力测试：</strong>超过系统能力，测试极限和恢复能力</li>
+        <li><strong>稳定性测试：</strong>长时间运行（如24小时），验证稳定性和内存泄漏</li>
+    </ul>
+</div>
+
+<div class="highlight-box">
+    <h4>4. 自动化测试</h4>
+    <p><strong>定义：</strong>使用脚本代替手工执行重复性测试</p>
+    <p><strong>适合自动化的场景：</strong></p>
+    <ul>
+        <li>需求稳定，不频繁变动</li>
+        <li>重复执行次数多（如回归测试）</li>
+        <li>项目周期长，值得投入</li>
+        <li>接口测试（稳定性高）</li>
+    </ul>
+    <p><strong>不适合自动化：</strong></p>
+    <ul>
+        <li>需求频繁变化</li>
+        <li>一次性测试</li>
+        <li>UI频繁变动的页面</li>
+        <li>探索性测试</li>
+    </ul>
+    <p><strong>ROI计算：</strong></p>
+    <ul>
+        <li>成本：开发时间 + 维护时间</li>
+        <li>收益：节省的人工执行时间</li>
+        <li>ROI = 收益 / 成本</li>
+    </ul>
+</div>
+
+<hr>
+
+<h3>测试流程</h3>
+
+<div class="tech-box">
+    <h4>完整测试流程</h4>
+    <ol>
+        <li><strong>需求评审</strong>
+            <ul>
+                <li>参与需求评审会议</li>
+                <li>理解业务需求和技术方案</li>
+                <li>识别风险点和测试难点</li>
+                <li>提出测试建议</li>
+            </ul>
+        </li>
+        <li><strong>测试计划</strong>
+            <ul>
+                <li>测试范围：测什么、不测什么</li>
+                <li>测试策略：如何测（功能、接口、性能）</li>
+                <li>测试时间：排期安排</li>
+                <li>测试资源：人员、环境、工具</li>
+            </ul>
+        </li>
+        <li><strong>用例设计</strong>
+            <ul>
+                <li>根据需求设计测试用例</li>
+                <li>用例评审（与开发、产品确认）</li>
+                <li>用例优化和补充</li>
+            </ul>
+        </li>
+        <li><strong>测试执行</strong>
+            <ul>
+                <li>冒烟测试（基本功能验证）</li>
+                <li>功能测试（详细功能验证）</li>
+                <li>回归测试（验证修复不影响其他功能）</li>
+                <li>Bug管理（提Bug、跟踪、验证）</li>
+            </ul>
+        </li>
+        <li><strong>测试报告</strong>
+            <ul>
+                <li>测试覆盖情况</li>
+                <li>Bug统计（总数、严重级别、遗留）</li>
+                <li>测试结论（是否可以上线）</li>
+                <li>风险提示</li>
+            </ul>
+        </li>
+        <li><strong>上线验收</strong>
+            <ul>
+                <li>上线checkList</li>
+                <li>线上验证（冒烟测试）</li>
+                <li>线上监控</li>
+                <li>问题应急响应</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<hr>
+
+<h3>测试用例设计方法</h3>
+
+<div class="example-box">
+    <h4>等价类划分法</h4>
+    <p><strong>原理：</strong>将输入划分为若干等价类，每类选一个代表性测试</p>
+    <p><strong>示例：</strong>年龄输入框（要求1-120）</p>
+    <table>
+        <tr>
+            <th>等价类</th>
+            <th>测试数据</th>
+            <th>期望结果</th>
+        </tr>
+        <tr>
+            <td>有效等价类</td>
+            <td>50</td>
+            <td>输入成功</td>
+        </tr>
+        <tr>
+            <td>无效等价类（小于最小值）</td>
+            <td>0</td>
+            <td>提示错误</td>
+        </tr>
+        <tr>
+            <td>无效等价类（大于最大值）</td>
+            <td>121</td>
+            <td>提示错误</td>
+        </tr>
+        <tr>
+            <td>无效等价类（非数字）</td>
+            <td>abc</td>
+            <td>提示错误</td>
+        </tr>
+    </table>
+</div>
+
+<div class="example-box">
+    <h4>边界值分析法</h4>
+    <p><strong>原理：</strong>边界附近最容易出错，测试边界值和边界附近的值</p>
+    <p><strong>示例：</strong>年龄输入框（要求1-120）</p>
+    <ul>
+        <li>最小值-1：0（无效）</li>
+        <li>最小值：1（有效）</li>
+        <li>最小值+1：2（有效）</li>
+        <li>中间值：60（有效）</li>
+        <li>最大值-1：119（有效）</li>
+        <li>最大值：120（有效）</li>
+        <li>最大值+1：121（无效）</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>场景法</h4>
+    <p><strong>原理：</strong>模拟用户真实使用场景</p>
+    <p><strong>示例：</strong>电商下单场景</p>
+    <ol>
+        <li>用户登录</li>
+        <li>浏览商品列表</li>
+        <li>查看商品详情</li>
+        <li>加入购物车</li>
+        <li>修改数量</li>
+        <li>选择地址</li>
+        <li>选择支付方式</li>
+        <li>提交订单</li>
+        <li>支付</li>
+        <li>查看订单</li>
+    </ol>
+    <p><strong>异常场景：</strong></p>
+    <ul>
+        <li>库存不足时下单</li>
+        <li>支付失败</li>
+        <li>网络超时</li>
+        <li>重复提交订单</li>
+    </ul>
+</div>
+
+<hr>
+
+<h3>Bug管理</h3>
+
+<div class="tech-box">
+    <h4>Bug生命周期</h4>
+    <p><code>New</code> → <code>Open</code> → <code>Fixed</code> → <code>Reopen/Verified</code> → <code>Closed</code></p>
+    <ul>
+        <li><strong>New:</strong> 新发现的Bug</li>
+        <li><strong>Open:</strong> 确认Bug，开发处理中</li>
+        <li><strong>Fixed:</strong> 开发已修复</li>
+        <li><strong>Verified:</strong> 测试验证通过</li>
+        <li><strong>Reopen:</strong> 验证未通过，重新打开</li>
+        <li><strong>Closed:</strong> 关闭Bug</li>
+    </ul>
+</div>
+
+<div class="tech-box">
+    <h4>Bug严重级别</h4>
+    <table>
+        <tr>
+            <th>级别</th>
+            <th>说明</th>
+            <th>示例</th>
+        </tr>
+        <tr>
+            <td>P0/Blocker</td>
+            <td>致命，系统崩溃或核心功能不可用</td>
+            <td>系统崩溃、数据丢失、无法登录</td>
+        </tr>
+        <tr>
+            <td>P1/Critical</td>
+            <td>严重，主要功能受影响</td>
+            <td>支付失败、订单无法提交</td>
+        </tr>
+        <tr>
+            <td>P2/Major</td>
+            <td>一般，功能部分不可用</td>
+            <td>某个按钮不生效、提示信息错误</td>
+        </tr>
+        <tr>
+            <td>P3/Minor</td>
+            <td>轻微，体验问题</td>
+            <td>UI美观问题、文案错误</td>
+        </tr>
+    </table>
+</div>
+
+<div class="tech-box">
+    <h4>Bug描述规范</h4>
+    <p><strong>标题：</strong>[模块]简短描述问题</p>
+    <p><strong>内容包含：</strong></p>
+    <ol>
+        <li><strong>环境：</strong>测试/生产，浏览器版本，APP版本</li>
+        <li><strong>前置条件：</strong>账号状态、数据准备</li>
+        <li><strong>复现步骤：</strong>详细操作步骤（1、2、3...）</li>
+        <li><strong>实际结果：</strong>出现了什么问题</li>
+        <li><strong>期望结果：</strong>应该是什么样的</li>
+        <li><strong>截图/日志：</strong>错误截图或日志</li>
+    </ol>
+</div>
+
+<hr>
+
+<h3>测试工具对比</h3>
+
+<table>
+    <tr>
+        <th>工具</th>
+        <th>类型</th>
+        <th>优点</th>
+        <th>缺点</th>
+        <th>适用场景</th>
+    </tr>
+    <tr>
+        <td>Postman</td>
+        <td>接口测试</td>
+        <td>简单易用、图形化</td>
+        <td>批量测试功能弱</td>
+        <td>接口调试、快速验证</td>
+    </tr>
+    <tr>
+        <td>JMeter</td>
+        <td>性能/接口测试</td>
+        <td>功能强大、免费</td>
+        <td>学习成本高</td>
+        <td>性能测试、批量接口测试</td>
+    </tr>
+    <tr>
+        <td>pytest</td>
+        <td>自动化框架</td>
+        <td>简洁、功能强</td>
+        <td>需要编程基础</td>
+        <td>接口自动化、单元测试</td>
+    </tr>
+    <tr>
+        <td>Selenium</td>
+        <td>UI自动化</td>
+        <td>跨浏览器</td>
+        <td>维护成本高</td>
+        <td>Web UI自动化</td>
+    </tr>
+    <tr>
+        <td>Fiddler</td>
+        <td>抓包工具</td>
+        <td>功能强大</td>
+        <td>仅Windows</td>
+        <td>抓包分析、Mock数据</td>
+    </tr>
+    <tr>
+        <td>Charles</td>
+        <td>抓包工具</td>
+        <td>跨平台</td>
+        <td>付费</td>
+        <td>移动端抓包、弱网测试</td>
+    </tr>
+</table>
+
