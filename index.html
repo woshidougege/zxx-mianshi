@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试准备 - 张晓雪 测试工程师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 15px;
+                padding: 5px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px 15px;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            header p {
+                font-size: 0.85em;
+            }
+        }
+
+        .search-box {
+            padding: 12px 15px;
+            background: #f9f9fa;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .search-container {
+            position: relative;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 50px 10px 40px;
+            font-size: 15px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.2em;
+            pointer-events: none;
+        }
+        
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            line-height: 1;
+            transition: all 0.3s;
+        }
+        
+        .search-clear:hover {
+            background: #ff5252;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .search-clear.visible {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .search-input {
+                font-size: 14px;
+                padding: 8px 45px 8px 35px;
+            }
+        }
+
+        mark {
+            background: #fef08a;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        mark.current {
+            background: #fbbf24;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            position: sticky;
+            top: 55px;
+            z-index: 99;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .nav-tab {
+            flex: 0 0 auto;
+            min-width: 120px;
+            padding: 12px 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                top: 45px;
+            }
+            .nav-tab {
+                min-width: 100px;
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+
+        .content {
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px 15px;
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.15em;
+            margin: 20px 0 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            h2 { font-size: 1.5em; }
+            h3 { font-size: 1.25em; }
+            h4 { font-size: 1.1em; }
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef08a 0%, #fef08a 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .project-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .card, .project-card {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        .tip {
+            background: #e8f4f8;
+            border-left: 4px solid #00bcd4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9em;
+            }
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .search-box, .nav-tabs {
+                display: none;
+            }
+            .content {
+                display: block !important;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 张晓雪 - 测试工程师面试准备</h1>
+            <p>5年互联网测试经验 | 贝壳/好未来/水滴保驻场 | 功能/接口/性能/自动化</p>
+        </header>
+
+        <div class="search-box">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索关键词...（支持Enter键切换）">
+                    <button class="search-clear" id="searchClear" title="清空搜索">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab(0)">📋 个人简历</button>
+            <button class="nav-tab" onclick="switchTab(1)">🚀 项目经历</button>
+            <button class="nav-tab" onclick="switchTab(2)">🛠️ 测试技术</button>
+            <button class="nav-tab" onclick="switchTab(3)">💼 面试技巧</button>
+            <button class="nav-tab" onclick="switchTab(4)">❓ 常见问题</button>
+        </div>
+
+        <!-- Tab 0: 个人简历 -->
+        <div class="content active" id="content0">
+            <h2>📋 个人简历</h2>
+            
+            <div class="card">
+                <h3>基本信息</h3>
+                <p><strong>姓名：</strong>张晓雪</p>
+                <p><strong>工作年限：</strong>5年（2020.05 - 至今）</p>
+                <p><strong>求职意向：</strong>测试工程师</p>
+                <p><strong>期望薪资：</strong>面议（市场参考 12-15K）</p>
+                <p><strong>工作地点：</strong>北京</p>
+            </div>
+
+            <div class="card">
+                <h3>个人优势</h3>
+                <ol>
+                    <li><strong>大厂驻场经验：</strong>5年互联网测试经验，先后驻场<span class="highlight">贝壳找房、好未来教育、水滴保、vipkid</span>等知名互联网公司，覆盖电商供应链、薪酬、保险、人力资源等多个核心业务领域。</li>
+                    <li><strong>测试技术全面：</strong>熟练掌握<span class="highlight">功能测试、接口测试、性能测试、自动化测试</span>等多种测试类型，能够根据项目特点选择合适的测试策略。</li>
+                    <li><strong>自动化测试实践：</strong>具备<span class="highlight">Python + pytest</span>接口自动化开发能力，熟悉<span class="highlight">Jenkins CI/CD</span>流程，能够搭建自动化准入准出体系。</li>
+                    <li><strong>微信生态测试专长：</strong>熟悉<span class="highlight">微信小程序、H5、公众号</span>测试全链路，覆盖授权登录、支付、订阅消息等核心场景。</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>职业经历</h3>
+                <table>
+                    <tr>
+                        <th>时间</th>
+                        <th>公司</th>
+                        <th>驻场单位</th>
+                    </tr>
+                    <tr>
+                        <td>2025.06-2025.08</td>
+                        <td>如是纵横科技</td>
+                        <td>好未来教育集团</td>
+                    </tr>
+                    <tr>
+                        <td>2023.11-2025.06</td>
+                        <td>人瑞人力</td>
+                        <td>贝壳找房</td>
+                    </tr>
+                    <tr>
+                        <td>2021.05-2023.11</td>
+                        <td>魔方网聘</td>
+                        <td>水滴保</td>
+                    </tr>
+                    <tr>
+                        <td>2020.05-2021.05</td>
+                        <td>魔宁网络</td>
+                        <td>vipkid</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>核心技能</h3>
+                <h4>测试能力</h4>
+                <span class="skill-tag">功能测试</span>
+                <span class="skill-tag">接口测试</span>
+                <span class="skill-tag">性能测试</span>
+                <span class="skill-tag">自动化测试</span>
+                <span class="skill-tag">数据库测试</span>
+                
+                <h4>工具/技术</h4>
+                <span class="skill-tag">JMeter</span>
+                <span class="skill-tag">Postman</span>
+                <span class="skill-tag">Python + pytest</span>
+                <span class="skill-tag">Jenkins CI/CD</span>
+                <span class="skill-tag">Fiddler/Charles</span>
+                <span class="skill-tag">MySQL</span>
+                
+                <h4>业务领域</h4>
+                <span class="skill-tag">电商供应链</span>
+                <span class="skill-tag">薪酬系统</span>
+                <span class="skill-tag">保险业务</span>
+                <span class="skill-tag">微信生态</span>
+                <span class="skill-tag">工作流系统</span>
+            </div>
+        </div>
+
+        <!-- Tab 1: 项目经历 -->
+        <div class="content" id="content1">
+            <h2>🚀 项目经历详解</h2>
+
+            <!-- 项目1 -->
+            <div class="project-card">
+                <h3>好未来 - 供应链货盘系统（2025.06-2025.08）</h3>
+                
+                <h4>📌 项目背景</h4>
+                <p>电商供应链核心系统，负责订单管理、赠品匹配、分销结算等核心功能，支持抖店、天猫等多平台订单数据对接与流转。</p>
+
+                <h4>🎯 测试职责</h4>
+                <ul>
+                    <li><strong>订单管理模块：</strong>负责原始单递交、订单审核、赠品匹配策略等核心流程测试，结合数据库校验关键字段一致性。</li>
+                    <li><strong>分销结算模块：</strong>负责分销商管理、价盘配置、订单生成匹配价盘、结算单生成全链路验证。</li>
+                    <li><strong>多平台对接：</strong>进行抖店/天猫等多平台下单场景测试，验证订单同步、数据流转一致性。</li>
+                </ul>
+
+                <h4>💡 面试话术（1分钟版）</h4>
+                <div class="card">
+                    <p>"这是我最近在好未来驻场时做的项目，是一个电商供应链系统，主要负责订单管理和分销结算。"</p>
+                    <p>"这个项目有几个难点：一是订单流程特别复杂，从下单到退货全生命周期有十几个节点；二是涉及多平台对接，抖店、天猫的订单数据流转要保证准确；三是分销结算逻辑复杂，要验证价盘匹配、结算单生成的准确性。"</p>
+                    <p>"我的测试策略是：功能测试覆盖核心流程和边界场景，接口测试保证数据流转一致性，数据库校验关键字段准确性。"</p>
+                </div>
+
+                <h4>🔍 常见追问</h4>
+                <div class="warning">
+                    <p><strong>Q：订单数据一致性怎么保证？</strong></p>
+                    <p>A："我会在每个关键节点做数据库校验。比如下单后，我会查数据库确认订单表、订单明细表、库存表的数据是否一致；赠品匹配后，我会验证赠品表和订单表的关联是否正确。"</p>
+                </div>
+            </div>
+
+            <!-- 项目2 -->
+            <div class="project-card">
+                <h3>贝壳找房 - 供应链货品与供应商管理（2024.05-2025.06）</h3>
+                
+                <h4>📌 项目背景</h4>
+                <p>贝壳供应链系统，实现商品从创建、店铺上架、展厅样品上撤样到多模式配送的全链路管控，支持供应商入驻申请、资质审核、合同签署。</p>
+
+                <h4>🎯 测试职责</h4>
+                <ul>
+                    <li><strong>商品全流程测试：</strong>负责商品从基础库配置到店铺商品上下架、展厅样品上撤样的全流程测试。</li>
+                    <li><strong>供应商管理测试：</strong>负责供应商全生命周期测试，覆盖入驻申请、审批、资质动态审核及合同全流程管理。</li>
+                    <li><strong>审批中心测试：</strong>验证各类审批流的配置逻辑、触发条件、流转规则、维度组合排重校验。</li>
+                    <li><strong>自动化测试：</strong>通过 sosotest 维护自动化脚本，通过 kones 流水线提升准入/准出能力。</li>
+                </ul>
+
+                <h4>💡 面试话术（1分钟版）</h4>
+                <div class="card">
+                    <p>"这是我在贝壳驻场时间最长的项目，做了一年多，主要负责供应链的商品管理和供应商管理模块。"</p>
+                    <p>"这个项目涉及的业务流程比较复杂，商品从创建到上架到展厅样品管理，整个生命周期有很多状态流转。还有个审批中心，各种审批流的配置逻辑很复杂。"</p>
+                    <p>"我在这个项目中做了两件事：一是保证功能质量，覆盖各种业务场景和边界情况；二是搭建自动化，用 sosotest 维护核心接口自动化用例。"</p>
+                </div>
+            </div>
+
+            <!-- 项目3 -->
+            <div class="project-card">
+                <h3>贝壳找房 - 工资单项目（2023.11-2024.05）</h3>
+                
+                <h4>📌 项目背景</h4>
+                <p>薪酬系统核心模块，支持 PC 端与移动端页面灵活配置，集成考勤、绩效等多上游系统数据。</p>
+
+                <h4>🎯 测试职责</h4>
+                <ul>
+                    <li><strong>配置化测试：</strong>多端（PC、移动端）配置化测试，验证字段独立配置规则。</li>
+                    <li><strong>全流程测试：</strong>协同其他系统测试人员从上游系统构造数据，保证工资单获取数据的准确性。</li>
+                    <li><strong>性能测试：</strong>进行接口压测，记录系统性能指标（QPS、响应时长、错误率等）。</li>
+                </ul>
+            </div>
+
+            <!-- 项目4 -->
+            <div class="project-card">
+                <h3>水滴保 - 续费续保项目（2021.05-2023.10）</h3>
+                
+                <h4>📌 项目背景</h4>
+                <p>负责"增长-续费续保"业务的测试，主要通过各种触达方式和活动互动实现业务目标。</p>
+
+                <h4>🎯 测试职责</h4>
+                <ul>
+                    <li><strong>微信生态测试：</strong>覆盖小程序码生成、订阅消息模板、公众号关注状态联动；校验微信/支付宝支付与代扣签约流程。</li>
+                    <li><strong>自动化测试：</strong>使用 Python + pytest + allure 覆盖核心触达逻辑自动化回归。</li>
+                    <li><strong>造数工具开发：</strong>使用 Java 实现续保接入自动化构建测试数据。</li>
+                </ul>
+
+                <h4>🔍 微信生态测试重点（差异化优势）</h4>
+                <div class="success">
+                    <ul>
+                        <li><strong>小程序测试：</strong>小程序码生成与参数长度限制、授权登录流程、跳转链路</li>
+                        <li><strong>订阅消息：</strong>模板配置、字数限制、订阅状态管理</li>
+                        <li><strong>公众号测试：</strong>关注状态联动、菜单跳转、消息推送</li>
+                        <li><strong>支付测试：</strong>微信支付、支付宝支付、代扣签约流程</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 项目5 -->
+            <div class="project-card">
+                <h3>vipkid - 信息化人资团队项目（2020.06-2021.05）</h3>
+                
+                <h4>📌 项目背景</h4>
+                <p>负责多个人资业务系统测试，包括 PeopleSoft、合同电子签、弹性福利、入职与外包人员管理等。</p>
+
+                <h4>🎯 测试职责</h4>
+                <ul>
+                    <li><strong>性能测试：</strong>对弹性福利系统接口进行压测，记录系统性能指标。</li>
+                    <li><strong>自动化回归：</strong>梳理核心接口，基于 JMeter + 数据库校验实现自动化回归。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab 2: 测试技术详解 -->
+        <div class="content" id="content2">
+            <h2>🛠️ 测试技术详解</h2>
+
+            <div class="project-card">
+                <h3>1. 功能测试</h3>
+                <h4>核心能力</h4>
+                <ul>
+                    <li><strong>测试用例设计：</strong>等价类划分、边界值分析、因果图、判定表、场景法</li>
+                    <li><strong>测试流程：</strong>需求评审、测试计划、测试方案、用例设计、用例执行、测试报告</li>
+                    <li><strong>缺陷管理：</strong>缺陷提交、跟踪、验证、关闭</li>
+                </ul>
+                <h4>面试怎么说</h4>
+                <div class="card">
+                    <p>"功能测试是测试工程师的基本功。我的方法是：先理解需求，参加需求评审；然后设计用例，用等价类、边界值这些方法覆盖各种场景；执行用例时会结合实际情况补充探索性测试。"</p>
+                    <p>"我比较关注边界场景和异常场景，因为这些地方最容易出问题。比如输入框的长度限制、数值的上下限、并发操作、网络异常等。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>2. 接口测试</h3>
+                <h4>工具和方法</h4>
+                <ul>
+                    <li><strong>JMeter：</strong>接口功能测试、性能测试、自动化回归</li>
+                    <li><strong>Postman：</strong>接口调试、参数化测试、环境管理</li>
+                    <li><strong>测试重点：</strong>参数校验、返回值校验、状态码、错误码、数据库校验</li>
+                </ul>
+                <h4>面试怎么说</h4>
+                <div class="card">
+                    <p>"接口测试我主要用 JMeter 和 Postman。Postman 用来做接口调试和临时验证，JMeter 用来做批量测试和自动化回归。"</p>
+                    <p>"接口测试重点关注几个方面：一是参数校验，必填参数、参数类型、参数长度等；二是返回值校验，状态码、数据格式、字段值是否正确；三是数据库校验，接口调用后数据库数据是否符合预期。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>3. 性能测试</h3>
+                <h4>测试类型</h4>
+                <ul>
+                    <li><strong>压力测试：</strong>测试系统在高负载下的表现</li>
+                    <li><strong>并发测试：</strong>测试系统同时处理多个请求的能力</li>
+                    <li><strong>稳定性测试：</strong>测试系统长时间运行的稳定性</li>
+                </ul>
+                <h4>关注指标</h4>
+                <ul>
+                    <li><strong>QPS：</strong>每秒查询数（Queries Per Second）</li>
+                    <li><strong>RT：</strong>响应时间（Response Time）</li>
+                    <li><strong>错误率：</strong>失败请求占比</li>
+                </ul>
+                <h4>面试怎么说</h4>
+                <div class="card">
+                    <p>"性能测试我用 JMeter 做。首先要明确测试目标，比如这个接口要支持多少 QPS，响应时间控制在多少毫秒以内。然后设计测试场景，配置并发数、持续时间、压力模型。"</p>
+                    <p>"压测过程中要实时监控系统指标，不只是看 JMeter 的报告，还要看服务器的 CPU、内存、数据库连接数等。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>4. 自动化测试</h3>
+                <h4>技术栈</h4>
+                <ul>
+                    <li><strong>Python + pytest + allure：</strong>接口自动化测试框架</li>
+                    <li><strong>JMeter：</strong>接口自动化回归</li>
+                    <li><strong>Jenkins：</strong>CI/CD 集成，定时执行</li>
+                </ul>
+                <h4>实践经验</h4>
+                <div class="success">
+                    <ul>
+                        <li>在水滴保项目中使用 Python + pytest + allure 搭建接口自动化框架</li>
+                        <li>在贝壳项目中通过 sosotest 维护核心接口自动化</li>
+                        <li>在 vipkid 项目中基于 JMeter + 数据库校验实现自动化回归</li>
+                    </ul>
+                </div>
+                <h4>面试怎么说</h4>
+                <div class="card">
+                    <p>"我做自动化测试主要是接口自动化，因为接口相对稳定，自动化的投入产出比比较高。"</p>
+                    <p>"我的做法是：先梳理核心业务流程，把流程分解成接口调用链；然后用 pytest 编写测试用例，每个用例包括准备数据、调用接口、断言结果、清理数据；最后集成到 Jenkins，每次代码合并或发布前自动执行。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>5. 微信生态测试（差异化优势）</h3>
+                <h4>测试重点</h4>
+                <ul>
+                    <li><strong>小程序：</strong>授权登录、跳转链路、小程序码生成</li>
+                    <li><strong>订阅消息：</strong>模板配置、字数限制、订阅状态管理</li>
+                    <li><strong>公众号：</strong>关注状态、菜单跳转、消息推送</li>
+                    <li><strong>支付：</strong>微信支付、代扣签约</li>
+                </ul>
+                <h4>面试怎么说（展示差异化）</h4>
+                <div class="card">
+                    <p>"微信生态测试是我的一个差异化优势，因为我在水滴保项目中做了很多这方面的测试。"</p>
+                    <p>"微信生态有很多特殊的测试点。比如小程序码生成，要验证参数长度限制（最长128字节）；订阅消息要验证模板配置、字数限制、订阅状态；微信支付要验证签约流程、支付结果通知。"</p>
+                    <p>"这些经验是在实际项目中积累的，对做微信相关业务的测试很有帮助。"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: 面试技巧 -->
+        <div class="content" id="content3">
+            <h2>💼 面试技巧与话术</h2>
+
+            <div class="project-card">
+                <h3>1. 自我介绍模板（1-2分钟）</h3>
+                <div class="card">
+                    <p>"您好，我是张晓雪，有5年测试工作经验，主要做功能测试、接口测试、性能测试和自动化测试。"</p>
+                    <p>"<strong>工作经历：</strong>我这5年都是在一线互联网公司驻场工作，先后在贝壳找房、好未来教育、水滴保、vipkid 驻场，接触的都是核心业务系统。"</p>
+                    <p>"<strong>技术能力：</strong>功能测试是基础，我能独立完成测试计划、用例设计、执行、报告全流程；接口测试我用 JMeter、Postman，会做自动化回归；性能测试能用 JMeter 做压力测试；自动化测试会用 Python + pytest 搭建框架。"</p>
+                    <p>"<strong>差异化优势：</strong>我对微信生态测试比较熟悉，小程序、H5、公众号、微信支付这些场景都测过。"</p>
+                    <p>"以上是我的基本情况，您看还有什么想了解的吗？"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>2. 项目介绍套路</h3>
+                <h4>三段式结构</h4>
+                <div class="card">
+                    <p><strong>第一段（30秒）：</strong>项目背景 + 核心功能</p>
+                    <p>"这是我在XX公司驻场时做的项目，是一个XX系统，主要负责XX功能..."</p>
+                    
+                    <p><strong>第二段（1分钟）：</strong>测试职责 + 测试方法</p>
+                    <p>"我的测试工作主要包括：一是XX模块，我负责XX测试；二是XX模块，我负责XX验证..."</p>
+                    
+                    <p><strong>第三段（看面试官反应）：</strong>难点 + 解决方案</p>
+                    <p>"这个项目有几个难点：一是XX，我通过XX方法解决；二是XX..."</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>3. 回答问题的技巧</h3>
+                <h4>技术问题回答套路</h4>
+                <div class="card">
+                    <ol>
+                        <li><strong>简单解释：</strong>这个技术/工具是干什么的（1-2句话）</li>
+                        <li><strong>项目经验：</strong>我在XX项目中怎么用的</li>
+                        <li><strong>具体实践：</strong>举个例子说明</li>
+                        <li><strong>效果/收获：</strong>达到了什么效果，学到了什么</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>4. 加分项</h3>
+                <ul>
+                    <li>✅ <strong>主动思考：</strong>不只是执行测试，还会思考如何提升测试效率</li>
+                    <li>✅ <strong>质量意识：</strong>关注线上质量，会做上线回测、异常监控</li>
+                    <li>✅ <strong>沟通能力：</strong>能和开发、产品高效沟通</li>
+                    <li>✅ <strong>学习能力：</strong>快速学习新业务、新技术</li>
+                </ul>
+            </div>
+
+            <div class="project-card">
+                <h3>5. 避坑指南</h3>
+                <div class="warning">
+                    <p>❌ <strong>不要说：</strong>"这个我不会" / "这个我没做过"</p>
+                    <p>✅ <strong>改成：</strong>"这个我了解一些，在XX项目中有过类似的经验"</p>
+                </div>
+                <div class="warning">
+                    <p>❌ <strong>不要说：</strong>"我就是按流程执行测试"</p>
+                    <p>✅ <strong>改成：</strong>"我会根据项目特点调整测试策略"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: 常见问题 -->
+        <div class="content" id="content4">
+            <h2>❓ 常见问题回答</h2>
+
+            <div class="project-card">
+                <h3>通用问题</h3>
+                
+                <h4>Q1：为什么离职？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"我之前是驻场的工作模式，项目结束后合同也到期了。现在想找一个更稳定的工作环境，能长期在一家公司做核心业务，有更好的职业发展。"</p>
+                </div>
+
+                <h4>Q2：为什么一直是驻场，没有转正？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"驻场这几年让我积累了很多经验，接触到了贝壳、好未来、水滴保这些大厂的核心业务。但确实驻场不如正式员工稳定，所以现在想找一个能直接入职的机会。"</p>
+                </div>
+
+                <h4>Q3：职业规划是什么？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"短期目标是深耕测试技术，提升自动化测试和性能测试能力。长期目标是往测试专家方向发展，或者转测试开发。"</p>
+                </div>
+
+                <h4>Q4：期望薪资？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"我了解了北京测试工程师的市场行情，5年经验加上大厂背景，一般在12-15K左右。具体薪资可以根据岗位职责和公司情况协商。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>技术问题</h3>
+
+                <h4>Q5：测试用例怎么设计？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"我设计用例的步骤是：</p>
+                    <ol>
+                        <li>理解需求，明确功能点和业务逻辑</li>
+                        <li>分析输入输出，确定测试范围</li>
+                        <li>用等价类划分、边界值分析等方法设计用例</li>
+                        <li>补充场景测试、异常测试</li>
+                        <li>评审用例，听取开发和产品的意见</li>
+                    </ol>
+                    <p>我比较关注边界场景和异常场景，因为这些地方最容易出bug。"</p>
+                </div>
+
+                <h4>Q6：如何保证测试质量？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"我从几个方面保证测试质量：</p>
+                    <ol>
+                        <li><strong>需求阶段：</strong>参加需求评审，提前发现需求问题</li>
+                        <li><strong>用例设计：</strong>用例覆盖全面，重点关注边界和异常</li>
+                        <li><strong>测试执行：</strong>严格按用例执行，发现问题及时提bug</li>
+                        <li><strong>回归测试：</strong>修复后回归验证，避免遗漏</li>
+                        <li><strong>上线后：</strong>做上线回测，监控异常日志</li>
+                    </ol>
+                </div>
+
+                <h4>Q7：自动化测试的价值是什么？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"自动化测试的价值主要体现在：</p>
+                    <ol>
+                        <li><strong>提升回归效率：</strong>以前手工回归要半天，自动化几分钟就能跑完</li>
+                        <li><strong>保证回归质量：</strong>自动化执行更稳定，不会漏测</li>
+                        <li><strong>快速反馈：</strong>集成到 CI/CD，每次发布前自动执行</li>
+                        <li><strong>释放人力：</strong>可以做更有价值的探索性测试</li>
+                    </ol>
+                    <p>当然自动化需要维护成本，所以我一般对核心、稳定的业务做自动化。"</p>
+                </div>
+
+                <h4>Q8：性能测试怎么做？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"性能测试的步骤是：</p>
+                    <ol>
+                        <li><strong>明确目标：</strong>要支持多少 QPS，响应时间多少</li>
+                        <li><strong>设计场景：</strong>配置并发数、持续时间、压力模型</li>
+                        <li><strong>执行压测：</strong>用 JMeter 执行，监控系统指标</li>
+                        <li><strong>分析结果：</strong>看 QPS、响应时间、错误率，定位瓶颈</li>
+                        <li><strong>优化验证：</strong>开发优化后再次压测，验证效果</li>
+                    </ol>
+                </div>
+
+                <h4>Q9：微信生态测试有什么特殊点？</h4>
+                <div class="card">
+                    <p><strong>参考答案（展示差异化优势）：</strong>"微信生态测试确实有很多特殊点：</p>
+                    <ol>
+                        <li><strong>小程序码：</strong>参数长度限制128字节，超长会生成失败</li>
+                        <li><strong>订阅消息：</strong>模板有字数限制，未订阅不能推送</li>
+                        <li><strong>授权登录：</strong>要测试授权流程、拒绝授权的兜底方案</li>
+                        <li><strong>支付签约：</strong>微信支付、代扣签约流程，支付结果通知</li>
+                        <li><strong>H5与小程序互跳：</strong>跳转链路、参数传递</li>
+                    </ol>
+                    <p>这些细节是在实际项目中踩坑总结出来的。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>项目问题</h3>
+
+                <h4>Q10：项目中遇到最难的问题是什么？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"在贝壳审批中心项目中，审批流的配置组合特别多，测试覆盖是个难点。"</p>
+                    <p>"我的解决方案是：先梳理核心场景，用正交表法减少用例数量；然后设计自动化脚本，参数化配置项，批量生成用例；最后重点测试边界场景和异常场景。"</p>
+                </div>
+
+                <h4>Q11：如何快速上手新项目？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"我快速上手新项目的方法是：</p>
+                    <ol>
+                        <li>了解背景：项目做什么的，核心业务流程是什么</li>
+                        <li>熟悉架构：系统架构、技术栈、依赖关系</li>
+                        <li>梳理流程：主流程、支流程、异常流程</li>
+                        <li>请教同事：不懂就问，向老同事学习</li>
+                        <li>实操验证：自己走一遍流程，加深理解</li>
+                    </ol>
+                    <p>我适应比较快，一般1-2周就能上手，1个月左右就能独立负责测试工作。"</p>
+                </div>
+
+                <h4>Q12：发现bug开发不认可怎么办？</h4>
+                <div class="card">
+                    <p><strong>参考答案：</strong>"首先我会确认这个确实是bug。然后和开发沟通，解释为什么这是bug，影响是什么。如果开发还是不认，我会找产品确认需求，或者找测试经理协调。大部分情况下通过沟通都能解决。"</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>总结</h3>
+                <div class="success">
+                    <h4>面试准备清单</h4>
+                    <ul>
+                        <li>☑️ 熟记个人优势和核心项目</li>
+                        <li>☑️ 准备自我介绍（1-2分钟）</li>
+                        <li>☑️ 梳理每个项目的介绍话术</li>
+                        <li>☑️ 准备常见技术问题的回答</li>
+                        <li>☑️ 准备离职原因和职业规划</li>
+                        <li>☑️ 准备1-2个提问（了解团队、业务、技术栈）</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>面试心态</h4>
+                    <p>✅ <strong>自信但不傲慢：</strong>相信自己的能力，但保持谦虚</p>
+                    <p>✅ <strong>真实不夸大：</strong>说自己真实做过的，不会的可以说"了解一些"</p>
+                    <p>✅ <strong>积极主动：</strong>展现学习能力和工作热情</p>
+                    <p>✅ <strong>沟通顺畅：</strong>语速适中，逻辑清晰，善于举例</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>💪 祝面试顺利！加油！</p>
+            <p style="margin-top: 10px; opacity: 0.7;">—— 张晓雪 测试工程师面试准备 ——</p>
+        </footer>
+    </div>
+
+    <script>
+        // ==================== Tab切换功能 ====================
+        function switchTab(index) {
+            // 移除所有active类
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 添加active类到当前tab和content
+            document.querySelectorAll('.nav-tab')[index].classList.add('active');
+            document.getElementById('content' + index).classList.add('active');
+            
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 清空搜索
+            searchInput.value = '';
+            searchClear.classList.remove('visible');
+            performSearch('');
+        }
+
+        // ==================== 搜索功能 ====================
+        let currentSearchIndex = 0;
+        let searchMatches = [];
+        
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        
+        // 搜索输入事件
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.trim();
+            
+            // 显示/隐藏清空按钮
+            if (searchTerm) {
+                searchClear.classList.add('visible');
+            } else {
+                searchClear.classList.remove('visible');
+            }
+            
+            performSearch(searchTerm);
+        });
+        
+        // Enter键导航
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    navigateSearch('prev');
+                } else {
+                    navigateSearch('next');
+                }
+            }
+        });
+        
+        // 清空按钮
+        searchClear.addEventListener('click', function() {
+            searchInput.value = '';
+            searchClear.classList.remove('visible');
+            performSearch('');
+        });
+        
+        // 执行搜索
+        function performSearch(searchTerm) {
+            currentSearchIndex = 0;
+            searchMatches = [];
+            
+            // 清除所有高亮
+            clearHighlights();
+            
+            if (searchTerm === '') {
+                return;
+            }
+            
+            // 高亮搜索结果（只在当前活动的content中搜索）
+            const activeContent = document.querySelector('.content.active');
+            highlightText(activeContent, searchTerm.toLowerCase());
+            
+            // 收集所有高亮的mark元素
+            searchMatches = Array.from(activeContent.querySelectorAll('mark'));
+            
+            // 如果有结果，跳转到第一个
+            if (searchMatches.length > 0) {
+                highlightCurrent(0);
+            }
+        }
+        
+        // 清除所有高亮
+        function clearHighlights() {
+            document.querySelectorAll('.content').forEach(content => {
+                const marks = content.querySelectorAll('mark');
+                marks.forEach(mark => {
+                    const parent = mark.parentNode;
+                    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                    parent.normalize();
+                });
+            });
+        }
+        
+        // 高亮文本
+        function highlightText(element, searchTerm) {
+            if (element.nodeType === Node.TEXT_NODE) {
+                const text = element.textContent;
+                const lowerText = text.toLowerCase();
+                const index = lowerText.indexOf(searchTerm);
+                
+                if (index !== -1) {
+                    const before = text.substring(0, index);
+                    const match = text.substring(index, index + searchTerm.length);
+                    const after = text.substring(index + searchTerm.length);
+                    
+                    const fragment = document.createDocumentFragment();
+                    fragment.appendChild(document.createTextNode(before));
+                    
+                    const mark = document.createElement('mark');
+                    mark.textContent = match;
+                    fragment.appendChild(mark);
+                    
+                    const afterNode = document.createTextNode(after);
+                    fragment.appendChild(afterNode);
+                    
+                    element.parentNode.replaceChild(fragment, element);
+                    
+                    // 递归处理after部分
+                    highlightText(afterNode, searchTerm);
+                }
+            } else if (element.nodeType === Node.ELEMENT_NODE && 
+                       element.tagName !== 'SCRIPT' && 
+                       element.tagName !== 'STYLE' &&
+                       element.tagName !== 'MARK') {
+                Array.from(element.childNodes).forEach(child => {
+                    highlightText(child, searchTerm);
+                });
+            }
+        }
+        
+        // 高亮当前项
+        function highlightCurrent(index) {
+            if (searchMatches.length === 0) return;
+            
+            // 移除所有current类
+            searchMatches.forEach(mark => mark.classList.remove('current'));
+            
+            // 添加current类到当前项
+            const currentMark = searchMatches[index];
+            currentMark.classList.add('current');
+            
+            // 滚动到当前项
+            currentMark.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+        
+        // 导航搜索结果
+        function navigateSearch(direction) {
+            if (searchMatches.length === 0) return;
+            
+            if (direction === 'next') {
+                currentSearchIndex = (currentSearchIndex + 1) % searchMatches.length;
+            } else {
+                currentSearchIndex = (currentSearchIndex - 1 + searchMatches.length) % searchMatches.length;
+            }
+            
+            highlightCurrent(currentSearchIndex);
+        }
+    </script>
+</body>
+</html>
