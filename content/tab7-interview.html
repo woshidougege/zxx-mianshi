@@ -147,6 +147,597 @@
 
 <hr>
 
+<h3>高频技术问题详解</h3>
+
+<div class="tech-box">
+    <h4>Q: 如何进行接口测试？完整流程是什么？</h4>
+    <div class="example-box">
+        <p><strong>✅ 完整回答（体现专业性）：</strong></p>
+        
+        <p><strong>1. 测试准备阶段：</strong></p>
+        <ul>
+            <li><strong>需求分析：</strong>参加需求评审，理解业务逻辑和接口用途</li>
+            <li><strong>接口文档：</strong>获取接口文档（Swagger/Yapi），了解URL、请求方法、参数、返回值</li>
+            <li><strong>环境准备：</strong>确认测试环境、获取token/签名机制、准备测试数据</li>
+        </ul>
+        
+        <p><strong>2. 用例设计：</strong></p>
+        <ul>
+            <li><strong>正常场景：</strong>正确参数，验证返回状态码200，返回数据正确</li>
+            <li><strong>异常场景：</strong>必填参数缺失、参数类型错误、参数超长、特殊字符</li>
+            <li><strong>边界场景：</strong>最大最小值、空值、null</li>
+            <li><strong>安全场景：</strong>SQL注入、XSS、越权访问</li>
+            <li><strong>业务场景：</strong>结合业务逻辑，如库存不足、重复提交、并发</li>
+        </ul>
+        
+        <p><strong>3. 测试执行：</strong></p>
+        <ul>
+            <li><strong>工具选择：</strong>Postman手工测试、JMeter性能测试、Python+pytest自动化</li>
+            <li><strong>验证点：</strong>状态码、响应时间、返回字段、数据库一致性、日志</li>
+            <li><strong>关联验证：</strong>上下游接口联调，数据流转验证</li>
+        </ul>
+        
+        <p><strong>4. 问题定位：</strong></p>
+        <ul>
+            <li><strong>抓包分析：</strong>使用Fiddler/Charles查看请求响应</li>
+            <li><strong>日志分析：</strong>查看后端日志定位问题</li>
+            <li><strong>数据库校验：</strong>对比请求前后数据变化</li>
+        </ul>
+        
+        <p><strong>实际案例：</strong></p>
+        <p>"比如在贝壳做供应链系统时，商品上架接口，我会先设计正常上架、重复上架、库存为0、必填字段缺失等场景。用Postman先手工验证通过，然后用Python+pytest写成自动化脚本，覆盖核心场景。同时会结合数据库查询，验证商品状态是否正确更新。"</p>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 怎么抓包？用什么工具？怎么分析？</h4>
+    <div class="example-box">
+        <p><strong>✅ 完整回答：</strong></p>
+        
+        <p><strong>常用工具：</strong></p>
+        <ul>
+            <li><strong>Fiddler：</strong>Windows端常用，支持HTTP/HTTPS抓包，可以修改请求重放</li>
+            <li><strong>Charles：</strong>Mac/Win都支持，界面友好，支持断点调试</li>
+            <li><strong>Chrome DevTools：</strong>浏览器自带，F12打开，适合Web端快速查看</li>
+        </ul>
+        
+        <p><strong>抓包步骤：</strong></p>
+        <p><strong>1. 配置代理：</strong>设置手机/电脑代理到抓包工具（一般8888端口）</p>
+        <p><strong>2. 安装证书：</strong>HTTPS需要安装证书才能解密</p>
+        <p><strong>3. 开始抓包：</strong>操作APP/网页，触发目标接口</p>
+        <p><strong>4. 过滤筛选：</strong>通过域名、关键字过滤找到目标请求</p>
+        
+        <p><strong>如何分析：</strong></p>
+        <ul>
+            <li><strong>请求分析：</strong>查看URL、请求方法、Headers（token/签名）、Body参数</li>
+            <li><strong>响应分析：</strong>查看状态码、响应时间、返回数据</li>
+            <li><strong>异常分析：</strong>看是否有报错、超时、重定向</li>
+            <li><strong>性能分析：</strong>查看接口响应时长，定位慢接口</li>
+        </ul>
+        
+        <p><strong>实际应用场景：</strong></p>
+        <p>"在水滴保项目中，用户反馈支付失败，我用Charles抓包发现是支付接口返回了402状态码，查看响应body发现是签名验证失败。然后对比正常和异常请求的签名参数，发现是时间戳格式不对导致的。"</p>
+        
+        <p><strong>高级用法：</strong></p>
+        <ul>
+            <li><strong>断点调试：</strong>拦截请求，修改参数后重新发送，验证边界场景</li>
+            <li><strong>弱网模拟：</strong>Charles可以设置网络延迟，模拟弱网环境</li>
+            <li><strong>重放攻击：</strong>保存请求，重复发送，测试幂等性</li>
+        </ul>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 如何分析前后端问题？怎么判断是前端还是后端的问题？</h4>
+    <div class="example-box">
+        <p><strong>✅ 分析思路：</strong></p>
+        
+        <p><strong>第一步：抓包看接口</strong></p>
+        <p>用F12或抓包工具查看接口请求和响应</p>
+        <ul>
+            <li><strong>后端问题：</strong>接口返回错误码、数据不对、超时、500错误</li>
+            <li><strong>前端问题：</strong>接口返回正确，但页面展示不对、逻辑处理错误</li>
+        </ul>
+        
+        <p><strong>第二步：检查关键点</strong></p>
+        <table>
+            <tr>
+                <th>判断标准</th>
+                <th>后端问题</th>
+                <th>前端问题</th>
+            </tr>
+            <tr>
+                <td>接口状态码</td>
+                <td>4xx、5xx错误</td>
+                <td>200成功</td>
+            </tr>
+            <tr>
+                <td>返回数据</td>
+                <td>数据缺失、字段错误、格式错误</td>
+                <td>数据正确</td>
+            </tr>
+            <tr>
+                <td>页面展示</td>
+                <td>接口数据就是错的</td>
+                <td>接口数据对，展示错</td>
+            </tr>
+            <tr>
+                <td>控制台报错</td>
+                <td>Network错误、超时</td>
+                <td>JS报错、渲染错误</td>
+            </tr>
+        </table>
+        
+        <p><strong>实际案例：</strong></p>
+        <p><strong>案例1（后端问题）：</strong></p>
+        <p>"用户下单后，页面显示'下单失败'。我F12查看，发现下单接口返回500，响应body提示'库存不足'，但实际库存是够的。查日志发现是Redis缓存库存和数据库库存不一致，定位为后端缓存更新问题。"</p>
+        
+        <p><strong>案例2（前端问题）：</strong></p>
+        <p>"工资单页面显示金额为0。我抓包看到接口返回数据是正确的（amount:5000），但页面显示0。查看前端代码发现是金额字段名拼写错了，前端取的是'ammount'（多了个m），导致取不到值。定位为前端问题。"</p>
+        
+        <p><strong>案例3（双方都有问题）：</strong></p>
+        <p>"商品详情页加载很慢。抓包发现接口响应时间3秒（后端慢），同时F12 Console看到很多图片404（前端图片地址错误）。这是前后端都有优化空间。"</p>
+        
+        <p><strong>沟通技巧：</strong></p>
+        <ul>
+            <li><strong>定位后再提：</strong>先自己分析清楚，有证据（截图/日志）再找开发</li>
+            <li><strong>描述清晰：</strong>说明问题现象、复现步骤、接口/页面截图</li>
+            <li><strong>不要甩锅：</strong>说"应该是前端/后端问题"，而不是"肯定是你的问题"</li>
+        </ul>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 常用的定位问题的Linux命令有哪些？</h4>
+    <div class="example-box">
+        <p><strong>✅ 分类回答（常用的说精，不常用的简单提）：</strong></p>
+        
+        <p><strong>1. 查看日志（最常用）</strong></p>
+        <pre><code># 实时查看日志（最常用）
+tail -f /var/log/app.log
+
+# 查看最后100行
+tail -n 100 /var/log/app.log
+
+# 查看日志前100行
+head -n 100 /var/log/app.log
+
+# 查看整个文件（小文件用）
+cat /var/log/app.log
+
+# 搜索包含ERROR的日志
+grep "ERROR" /var/log/app.log
+
+# 搜索ERROR，显示前后3行上下文
+grep -C 3 "ERROR" /var/log/app.log
+
+# 搜索ERROR，忽略大小写
+grep -i "error" /var/log/app.log
+
+# 查看包含"订单"和"失败"的日志
+grep "订单" /var/log/app.log | grep "失败"</code></pre>
+        
+        <p><strong>2. 查看进程</strong></p>
+        <pre><code># 查看Java进程
+ps -ef | grep java
+
+# 查看端口占用（如8080端口）
+netstat -nltp | grep 8080
+lsof -i:8080
+
+# 查看进程资源占用（CPU、内存）
+top</code></pre>
+        
+        <p><strong>3. 查看磁盘和文件</strong></p>
+        <pre><code># 查看磁盘使用情况
+df -h
+
+# 查看当前目录文件大小
+du -sh *
+
+# 查找文件
+find /var/log -name "*.log"
+
+# 查看文件大小
+ls -lh</code></pre>
+        
+        <p><strong>4. 网络相关</strong></p>
+        <pre><code># 测试网络连通性
+ping baidu.com
+
+# 测试端口是否通
+telnet 192.168.1.1 8080
+
+# 查看网络连接
+netstat -an</code></pre>
+        
+        <p><strong>实际应用场景：</strong></p>
+        <p>"在贝壳项目中，线上接口偶发超时，我先用 <code>tail -f /var/log/app.log</code> 实时看日志，发现有数据库连接超时的ERROR。然后用 <code>grep -C 10 'timeout' app.log</code> 查看超时前后的上下文，发现是某个SQL查询慢。再用 <code>ps -ef | grep java</code> 确认服务进程正常，最后定位是数据库索引缺失导致的慢查询。"</p>
+        
+        <p><strong>面试回答技巧：</strong></p>
+        <p>"我最常用的是 tail、grep、ps 这几个命令。比如定位问题时，先用 tail -f 实时看日志，找到错误关键词后用 grep 搜索相关日志，然后用 ps 确认服务状态。这样基本能定位80%的问题。"</p>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 拿到一个新需求，你会如何入手测试？</h4>
+    <div class="example-box">
+        <p><strong>✅ 结构化回答（体现测试思维）：</strong></p>
+        
+        <p><strong>第一步：需求理解（搞清楚要做什么）</strong></p>
+        <ul>
+            <li><strong>参加需求评审：</strong>理解业务背景、目标用户、核心功能</li>
+            <li><strong>提出疑问：</strong>不清楚的地方及时问产品，边界场景怎么处理</li>
+            <li><strong>确认验收标准：</strong>什么情况算测试通过</li>
+        </ul>
+        
+        <p><strong>第二步：技术方案评审（搞清楚怎么做）</strong></p>
+        <ul>
+            <li><strong>了解技术实现：</strong>涉及哪些系统、接口、数据库表</li>
+            <li><strong>识别风险点：</strong>新技术？改动大？影响老功能？</li>
+            <li><strong>评估测试范围：</strong>新功能+回归范围</li>
+        </ul>
+        
+        <p><strong>第三步：测试计划（规划怎么测）</strong></p>
+        <ul>
+            <li><strong>排期：</strong>开发时间、提测时间、测试时间、上线时间</li>
+            <li><strong>资源：</strong>需要几个人测试？需要什么测试环境？</li>
+            <li><strong>策略：</strong>功能测试、接口测试、自动化、性能测试？</li>
+        </ul>
+        
+        <p><strong>第四步：用例设计（设计测试场景）</strong></p>
+        <ul>
+            <li><strong>功能用例：</strong>正常流程、异常流程、边界场景</li>
+            <li><strong>接口用例：</strong>核心接口的参数验证</li>
+            <li><strong>兼容性：</strong>多端（APP/Web/小程序）、多浏览器</li>
+            <li><strong>数据验证：</strong>数据库、缓存、日志一致性</li>
+        </ul>
+        
+        <p><strong>第五步：测试执行</strong></p>
+        <ul>
+            <li><strong>冒烟测试：</strong>提测后先验证主流程能跑通</li>
+            <li><strong>功能测试：</strong>执行全部用例</li>
+            <li><strong>回归测试：</strong>验证老功能是否被影响</li>
+            <li><strong>探索性测试：</strong>根据经验补充场景</li>
+        </ul>
+        
+        <p><strong>第六步：总结输出</strong></p>
+        <ul>
+            <li><strong>测试报告：</strong>测试覆盖率、bug数量、风险点</li>
+            <li><strong>上线checklist：</strong>配置项、数据库脚本、回滚方案</li>
+        </ul>
+        
+        <p><strong>实际案例（STAR）：</strong></p>
+        <p>"比如贝壳供应链的商品审批功能，拿到需求后，我先参加评审理解了业务流程：商品提交→审批人审核→通过/驳回。然后参加技术方案评审，了解涉及3个接口、2张表。接着我设计了测试用例，覆盖了正常审批、驳回、多级审批、超时自动通过等场景。提测后先做冒烟，主流程通了再详细测试。最后输出测试报告，总共发现8个bug，全部修复后上线，线上运行稳定。"</p>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 给你一个场景，如何设计测试用例？（实战题）</h4>
+    <div class="example-box">
+        <p><strong>✅ 测试用例设计方法（记住这个模板）：</strong></p>
+        
+        <p><strong>设计思路：功能+边界+异常+兼容+安全</strong></p>
+        
+        <p><strong>示例1：登录功能测试用例</strong></p>
+        <table>
+            <tr>
+                <th>用例类型</th>
+                <th>测试场景</th>
+                <th>预期结果</th>
+            </tr>
+            <tr>
+                <td rowspan="3">正常功能</td>
+                <td>输入正确的用户名和密码</td>
+                <td>登录成功，跳转首页</td>
+            </tr>
+            <tr>
+                <td>记住密码功能</td>
+                <td>下次自动填充密码</td>
+            </tr>
+            <tr>
+                <td>已登录用户访问登录页</td>
+                <td>直接跳转首页</td>
+            </tr>
+            <tr>
+                <td rowspan="5">异常场景</td>
+                <td>用户名错误</td>
+                <td>提示"用户名或密码错误"</td>
+            </tr>
+            <tr>
+                <td>密码错误</td>
+                <td>提示"用户名或密码错误"</td>
+            </tr>
+            <tr>
+                <td>用户名密码为空</td>
+                <td>提示"请输入用户名/密码"</td>
+            </tr>
+            <tr>
+                <td>账号被冻结</td>
+                <td>提示"账号已被冻结"</td>
+            </tr>
+            <tr>
+                <td>密码错误5次</td>
+                <td>账号锁定30分钟</td>
+            </tr>
+            <tr>
+                <td rowspan="3">边界场景</td>
+                <td>用户名/密码最小长度</td>
+                <td>按规则提示</td>
+            </tr>
+            <tr>
+                <td>用户名/密码最大长度</td>
+                <td>限制输入或提示</td>
+            </tr>
+            <tr>
+                <td>特殊字符（空格、emoji）</td>
+                <td>正确处理或提示</td>
+            </tr>
+            <tr>
+                <td rowspan="2">兼容性</td>
+                <td>多浏览器（Chrome/Safari/Firefox）</td>
+                <td>功能正常</td>
+            </tr>
+            <tr>
+                <td>多端（PC/H5/APP）</td>
+                <td>功能正常</td>
+            </tr>
+            <tr>
+                <td rowspan="2">安全性</td>
+                <td>密码明文传输？</td>
+                <td>加密传输</td>
+            </tr>
+            <tr>
+                <td>SQL注入（用户名：admin' or '1'='1）</td>
+                <td>拦截或转义</td>
+            </tr>
+        </table>
+        
+        <p><strong>示例2：电商下单功能测试用例</strong></p>
+        <ul>
+            <li><strong>正常流程：</strong>选商品→加购物车→结算→支付→下单成功</li>
+            <li><strong>库存场景：</strong>库存充足、库存不足、库存为0、并发下单超卖</li>
+            <li><strong>优惠场景：</strong>满减、优惠券、会员折扣、多种优惠叠加</li>
+            <li><strong>支付场景：</strong>支付成功、支付失败、支付超时、重复支付</li>
+            <li><strong>异常场景：</strong>网络中断、价格改变、商品下架</li>
+            <li><strong>数据验证：</strong>订单表、库存表、支付流水表数据一致性</li>
+        </ul>
+        
+        <p><strong>面试回答技巧：</strong></p>
+        <p>"拿到场景后，我会先确认需求细节，然后从正常、异常、边界、兼容、安全这几个维度设计用例。比如登录，正常就是输对密码登录成功，异常包括密码错误、账号不存在，边界包括最大最小长度，兼容包括多浏览器，安全包括SQL注入和密码加密。"</p>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 你做过性能测试吗？怎么做的？</h4>
+    <div class="example-box">
+        <p><strong>✅ 结构化回答（即使经验少，也体现懂思路）：</strong></p>
+        
+        <p><strong>我做过的性能测试（真实经历）：</strong></p>
+        <p>"在vipkid做弹性福利系统时，对核心接口做过性能测试。用JMeter模拟并发用户请求，主要验证系统在高并发下的稳定性和响应时间。"</p>
+        
+        <p><strong>性能测试流程：</strong></p>
+        
+        <p><strong>1. 明确目标</strong></p>
+        <ul>
+            <li><strong>性能指标：</strong>QPS（每秒请求数）、响应时间、错误率</li>
+            <li><strong>业务目标：</strong>比如要支持1000并发用户，接口响应时间<500ms</li>
+        </ul>
+        
+        <p><strong>2. 设计场景</strong></p>
+        <ul>
+            <li><strong>基准测试：</strong>单用户，验证基础性能</li>
+            <li><strong>负载测试：</strong>逐步增加并发，找到系统瓶颈</li>
+            <li><strong>压力测试：</strong>超过系统能力的极限测试</li>
+            <li><strong>稳定性测试：</strong>长时间运行（如跑一晚上）</li>
+        </ul>
+        
+        <p><strong>3. 准备数据</strong></p>
+        <ul>
+            <li><strong>测试数据：</strong>准备足够多的测试账号、商品等</li>
+            <li><strong>参数化：</strong>避免所有请求用同一个账号（压力不够真实）</li>
+        </ul>
+        
+        <p><strong>4. 执行测试（JMeter为例）</strong></p>
+        <pre><code># 典型场景配置
+线程数（并发用户）：100/500/1000
+Ramp-Up（启动时间）：10s
+循环次数：100次
+持续时间：10分钟</code></pre>
+        
+        <p><strong>5. 监控指标</strong></p>
+        <table>
+            <tr>
+                <th>指标</th>
+                <th>说明</th>
+                <th>合格标准（参考）</th>
+            </tr>
+            <tr>
+                <td>响应时间（RT）</td>
+                <td>接口返回时长</td>
+                <td>P95 < 500ms</td>
+            </tr>
+            <tr>
+                <td>QPS</td>
+                <td>每秒处理请求数</td>
+                <td>根据业务目标</td>
+            </tr>
+            <tr>
+                <td>错误率</td>
+                <td>失败请求占比</td>
+                <td>< 0.01%</td>
+            </tr>
+            <tr>
+                <td>CPU使用率</td>
+                <td>服务器CPU</td>
+                <td>< 80%</td>
+            </tr>
+            <tr>
+                <td>内存使用率</td>
+                <td>服务器内存</td>
+                <td>< 80%</td>
+            </tr>
+        </table>
+        
+        <p><strong>6. 分析结果</strong></p>
+        <ul>
+            <li><strong>正常：</strong>各项指标达标，无报错</li>
+            <li><strong>性能瓶颈：</strong>响应时间随并发增加而变慢</li>
+            <li><strong>慢SQL：</strong>查询数据库日志，找到慢查询</li>
+            <li><strong>资源不足：</strong>CPU/内存/数据库连接池满了</li>
+        </ul>
+        
+        <p><strong>实际案例：</strong></p>
+        <p>"在vipkid项目中，对福利领取接口做压测。目标是支持500并发，响应时间<500ms。我用JMeter配置了500个线程，循环请求100次。压测后发现在300并发时响应时间就超过1秒了，错误率也上升。查看监控发现是数据库连接池满了，开发调大连接池后，优化了慢SQL，再次压测达标。最终输出了压测报告，包含各并发下的性能指标和瓶颈分析。"</p>
+        
+        <p><strong>如果经验较少的回答：</strong></p>
+        <p>"我用JMeter做过一些基础的性能测试，主要是验证接口在并发情况下的响应时间和稳定性。虽然经验还不是特别丰富，但我了解性能测试的基本流程和指标，如果工作需要，我可以快速学习深入。"</p>
+    </div>
+</div>
+
+<div class="tech-box">
+    <h4>Q: 如何设计测试计划和测试策略？</h4>
+    <div class="example-box">
+        <p><strong>✅ 结构化回答（体现规划能力）：</strong></p>
+        
+        <p><strong>测试计划（Test Plan）- 项目整体规划</strong></p>
+        
+        <p><strong>1. 项目背景</strong></p>
+        <ul>
+            <li>项目名称、目标、业务价值</li>
+            <li>相关系统、团队人员</li>
+        </ul>
+        
+        <p><strong>2. 测试范围</strong></p>
+        <ul>
+            <li><strong>测试内容：</strong>哪些功能要测试</li>
+            <li><strong>不测试内容：</strong>哪些不在范围内（明确边界）</li>
+            <li><strong>测试类型：</strong>功能、接口、性能、自动化、兼容性</li>
+        </ul>
+        
+        <p><strong>3. 测试资源</strong></p>
+        <ul>
+            <li><strong>人员：</strong>几个测试人员，分工如何</li>
+            <li><strong>环境：</strong>测试环境、预发环境配置要求</li>
+            <li><strong>工具：</strong>JMeter、Postman、自动化框架</li>
+        </ul>
+        
+        <p><strong>4. 测试进度</strong></p>
+        <table>
+            <tr>
+                <th>阶段</th>
+                <th>时间</th>
+                <th>产出</th>
+            </tr>
+            <tr>
+                <td>需求评审</td>
+                <td>第1周</td>
+                <td>需求理解、测试范围</td>
+            </tr>
+            <tr>
+                <td>用例设计</td>
+                <td>第2周</td>
+                <td>测试用例</td>
+            </tr>
+            <tr>
+                <td>提测</td>
+                <td>第3周周一</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>功能测试</td>
+                <td>第3-4周</td>
+                <td>bug单、测试记录</td>
+            </tr>
+            <tr>
+                <td>回归测试</td>
+                <td>第5周</td>
+                <td>回归报告</td>
+            </tr>
+            <tr>
+                <td>上线</td>
+                <td>第5周周五</td>
+                <td>上线checklist</td>
+            </tr>
+        </table>
+        
+        <p><strong>5. 风险识别</strong></p>
+        <ul>
+            <li><strong>技术风险：</strong>新技术、改动大、依赖第三方</li>
+            <li><strong>进度风险：</strong>延期、人员不足</li>
+            <li><strong>质量风险：</strong>影响老功能、数据迁移</li>
+            <li><strong>应对措施：</strong>提前准备、增加资源、延长测试时间</li>
+        </ul>
+        
+        <p><strong>6. 验收标准</strong></p>
+        <ul>
+            <li>功能用例通过率 100%</li>
+            <li>严重bug数量 = 0</li>
+            <li>一般bug修复率 > 95%</li>
+            <li>性能指标达标</li>
+        </ul>
+        
+        <hr>
+        
+        <p><strong>测试策略（Test Strategy）- 具体怎么测</strong></p>
+        
+        <p><strong>1. 测试分层策略</strong></p>
+        <table>
+            <tr>
+                <th>测试层级</th>
+                <th>目的</th>
+                <th>方式</th>
+                <th>占比</th>
+            </tr>
+            <tr>
+                <td>单元测试</td>
+                <td>验证代码逻辑</td>
+                <td>开发写（JUnit）</td>
+                <td>70%</td>
+            </tr>
+            <tr>
+                <td>接口测试</td>
+                <td>验证接口功能</td>
+                <td>测试写（pytest）</td>
+                <td>20%</td>
+            </tr>
+            <tr>
+                <td>UI测试</td>
+                <td>验证页面功能</td>
+                <td>手工为主</td>
+                <td>10%</td>
+            </tr>
+        </table>
+        
+        <p><strong>2. 测试优先级策略</strong></p>
+        <ul>
+            <li><strong>P0（核心功能）：</strong>主流程、涉及钱、影响大，必须100%通过</li>
+            <li><strong>P1（重要功能）：</strong>常用功能，bug必须修</li>
+            <li><strong>P2（一般功能）：</strong>次要功能，bug可延后</li>
+            <li><strong>P3（优化类）：</strong>体验优化，bug可不修</li>
+        </ul>
+        
+        <p><strong>3. 自动化策略</strong></p>
+        <ul>
+            <li><strong>接口自动化：</strong>核心接口、稳定接口用pytest覆盖</li>
+            <li><strong>UI自动化：</strong>主流程、回归频繁的用Selenium</li>
+            <li><strong>性能测试：</strong>核心接口用JMeter定期压测</li>
+        </ul>
+        
+        <p><strong>4. 回归策略</strong></p>
+        <ul>
+            <li><strong>全量回归：</strong>大版本、影响广，执行全部用例</li>
+            <li><strong>部分回归：</strong>小改动，只测受影响模块</li>
+            <li><strong>自动化回归：</strong>每次发布前跑自动化脚本</li>
+        </ul>
+        
+        <p><strong>实际示例：</strong></p>
+        <p>"在贝壳供应链项目中，我的测试策略是：先接口测试保证数据正确（用Postman+pytest自动化），再UI测试验证展示和交互。核心流程（商品上架、审批）重点测试，边缘功能（导出、筛选）次要测试。自动化覆盖核心接口，通过Jenkins每晚自动回归。上线前做全量回归，确保老功能不受影响。"</p>
+    </div>
+</div>
+
+<hr>
+
 <h3>反问环节</h3>
 
 <div class="tech-box">
