@@ -243,11 +243,33 @@ async function performSearch(searchTerm) {
         return;
     }
 
+    // 立即显示搜索面板和按钮
+    const panel = document.getElementById('searchResultsPanel');
+    const toggleBtn = document.getElementById('searchTogglePanel');
+    if (panel) panel.classList.add('show');
+    if (toggleBtn) {
+        toggleBtn.classList.add('show', 'panel-open');
+    }
+
     // 显示加载状态
     const searchCount = document.getElementById('searchCount');
     const sidebarCounter = document.getElementById('sidebarCounter');
-    if (searchCount) searchCount.textContent = '搜索中...';
+    if (searchCount) {
+        searchCount.textContent = '搜索中...';
+        searchCount.classList.add('has-results');
+    }
     if (sidebarCounter) sidebarCounter.textContent = '搜索中...';
+    
+    // 显示搜索中的提示
+    const sidebarList = document.getElementById('searchResultsList');
+    if (sidebarList) {
+        sidebarList.innerHTML = `
+            <div class="search-results-empty">
+                <div class="search-results-empty-icon">🔍</div>
+                <p>正在搜索所有页面...</p>
+            </div>
+        `;
+    }
 
     // 确保所有tab内容都已加载
     for (let i = 0; i < tabsConfig.length; i++) {
@@ -295,18 +317,10 @@ async function performSearch(searchTerm) {
         }
         highlightCurrentMatch();
         updateSearchUI(searchMatches.length, 1);
-        
-        // 自动打开侧边栏
-        const panel = document.getElementById('searchResultsPanel');
-        if (panel) panel.classList.add('show');
-        const toggleBtn = document.getElementById('searchTogglePanel');
-        if (toggleBtn) {
-            toggleBtn.classList.add('show', 'panel-open');
-        }
+        // 面板已经在搜索开始时打开了，这里不需要重复操作
     } else {
+        // 没有找到结果
         updateSearchUI(0, 0);
-        const toggleBtn = document.getElementById('searchTogglePanel');
-        if (toggleBtn) toggleBtn.classList.add('show');
     }
 }
 
@@ -725,11 +739,12 @@ function renderSearchResults() {
     if (searchResultsData.length === 0) {
         sidebarList.innerHTML = `
             <div class="search-results-empty">
-                <div class="search-results-empty-icon">🔍</div>
-                <p>输入关键词开始搜索</p>
+                <div class="search-results-empty-icon">❌</div>
+                <p>未找到匹配结果</p>
+                <p style="font-size: 0.85em; color: #999;">试试其他关键词</p>
             </div>
         `;
-        sidebarTitle.textContent = '搜索结果';
+        sidebarTitle.textContent = '搜索结果 (0)';
         sidebarCounter.textContent = '0/0';
         sidebarPrevBtn.classList.remove('active');
         sidebarNextBtn.classList.remove('active');
