@@ -225,15 +225,15 @@ function closeMobileTooltip() {
 
 // ==================== 搜索功能（全局搜索所有tab） ====================
 async function performSearch(searchTerm) {
-    // 清除所有页面的高亮
-    const allContents = document.querySelectorAll('.content');
-    allContents.forEach(content => clearHighlights(content));
-    
     searchMatches = [];
     searchResultsData = [];
     currentSearchIndex = 0;
     
     if (searchTerm === '') {
+        // 清除所有页面的高亮
+        const allContents = document.querySelectorAll('.content');
+        allContents.forEach(content => clearHighlights(content));
+        
         updateSearchUI(0, 0);
         renderSearchResults();
         const panel = document.getElementById('searchResultsPanel');
@@ -276,6 +276,10 @@ async function performSearch(searchTerm) {
         await loadTabContent(i);
     }
     
+    // 加载完成后重新获取所有content元素并清除旧的高亮
+    const allContents = document.querySelectorAll('.content');
+    allContents.forEach(content => clearHighlights(content));
+    
     // 在所有tab中搜索
     allContents.forEach((content, tabIndex) => {
         highlightText(content, searchTerm, tabIndex);
@@ -285,8 +289,6 @@ async function performSearch(searchTerm) {
     allContents.forEach((content, tabIndex) => {
         const marks = Array.from(content.querySelectorAll('mark'));
         marks.forEach(mark => {
-            // 为每个mark添加tab索引
-            mark.dataset.tabIndex = tabIndex;
             searchMatches.push(mark);
         });
     });
@@ -333,7 +335,7 @@ function clearHighlights(element) {
     });
 }
 
-function highlightText(element, searchTerm) {
+function highlightText(element, searchTerm, tabIndex) {
     const walker = document.createTreeWalker(
         element,
         NodeFilter.SHOW_TEXT,
@@ -369,8 +371,9 @@ function highlightText(element, searchTerm) {
             if (part.toLowerCase() === searchTerm.toLowerCase()) {
                 const mark = document.createElement('mark');
                 mark.textContent = part;
+                // 设置tab索引，用于跨tab导航
+                mark.dataset.tabIndex = tabIndex;
                 fragment.appendChild(mark);
-                searchMatches.push(mark);
             } else if (part) {
                 fragment.appendChild(document.createTextNode(part));
             }
